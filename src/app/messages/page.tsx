@@ -5,10 +5,8 @@ import UtilityBar from "@/components/UtilityBar"
 const Messages = () => {
      
     return (
-        <main className="flex h-screen">
-            <Sidebar />
+        <main className="flex h-screen flex-1">
             <Main />
-            <UtilityBar />
         </main>
     )
 }

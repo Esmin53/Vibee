@@ -1,6 +1,8 @@
 import Providers from '@/components/Providers'
 import './globals.css'
 import { Inter } from 'next/font/google'
+import UtilityBar from '@/components/UtilityBar'
+import Sidebar from '@/components/Sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +21,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-zinc-100 ${inter.className}`}>
         <Providers>
-          {children}
+          <div className='flex h-screen w-screen overflow-x-hidden'>
+            <Sidebar />
+            <div className='flex w-screen flex-row-reverse md:flex-row'>
+              {children}
+              <UtilityBar />
+            </div>
+          </div>
         </Providers>
       </body>
     </html>

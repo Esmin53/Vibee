@@ -1,16 +1,10 @@
 import Main from "@/components/Main"
-import Sidebar from "@/components/Sidebar"
-import UtilityBar from "@/components/UtilityBar"
-
-
 
 const MessageRequests = () => {
     
     return (
-        <main className="flex h-screen">
-            <Sidebar />
+        <main className="flex h-screen flex-1">
             <Main />
-            <UtilityBar />
         </main>
     )
 }

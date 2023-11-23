@@ -1,20 +1,28 @@
 "use client"
 
-import { MessageSquare, MailQuestion, UserPlus, Settings, LogOut, Users, Sun } from "lucide-react"
+import {useSidebarContext} from "@/app/context/context"
+import { MessageSquare, MailQuestion, UserPlus, Settings, LogOut, Users, Sun, SidebarOpen } from "lucide-react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useContext } from "react"
 
 const Sidebar = () => {
 
     const pathname = usePathname()
     const currentPage = pathname.split("/")[1]
     const { setTheme, theme } = useTheme()
+    const { isSidebarOpen, setIsSidebarOpen } = useSidebarContext()
     
-    console.log(theme)
     
     return (
         <div className="w-24 h-full flex flex-col items-center pt-2 px-2 gap-4 bg-zinc-100">
+            <div className="w-14 h-14 bg-gray-200 rounded-md flex items-center justify-center cursor-pointer text-gray-500" onClick={() => {
+                setIsSidebarOpen(isSidebarOpen => !isSidebarOpen)
+                console.log(isSidebarOpen)
+            }}>
+                <SidebarOpen />
+            </div>
             <Link href="/messages" className={`w-14 h-14 ${currentPage === 'messages' ? 'bg-green-600' : 'bg-gray-200'} rounded-md flex items-center justify-center cursor-pointer`}>
                 <MessageSquare className={`w-7 h-7 ${currentPage === 'messages' ? 'text-gray-50' : 'text-gray-500'}`}/>
             </Link>

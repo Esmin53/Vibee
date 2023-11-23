@@ -8,7 +8,7 @@ const Main = async () => {
 
 
     return (
-        <div className="h-full bg-gray-200 w-4/5 flex flex-col shadow">
+        <div className="h-full bg-gray-200 w-full flex flex-col shadow">
             <div className="w-full h-16 bg-gray-200 flex justify-end items-center px-2 border-b-4 border-b-zinc-50">
                 <div className="flex gap-2 items-center h-full py-2">
                     <div className="py-2 border-r h-full border-slate-800 text-center flex items-center justify-center opacity-75">
