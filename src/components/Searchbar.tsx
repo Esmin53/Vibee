@@ -59,7 +59,6 @@ const SearchBar = () => {
             if ( !searchBarRef.current?.contains(event.target as Node)) {
               setInput('')
               setData([])
-              console.log("Clicked")
             }   
           };
 

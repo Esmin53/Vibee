@@ -16,11 +16,13 @@ const queryClient = new QueryClient()
 const Providers = ({children}: ProvidersProps) => {
     return (        
         <QueryClientProvider client={queryClient}>
-            <SessionProvider>
                 <OpenSidebar >
+            <SessionProvider>
+
                     {children}
-                </OpenSidebar>
+
             </SessionProvider>
+            </OpenSidebar>
         </QueryClientProvider>
     )
 }

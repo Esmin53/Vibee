@@ -1,21 +1,18 @@
-import { authOptions } from "@/lib/auth"
-import { getServerSession } from "next-auth"
-import Image from "next/image"
+"use client"
 
-const Main = async () => {
+import { useSidebarContext } from "@/app/context/context"
+import { SidebarClose } from "lucide-react"
+
+const Main = () => {
     
-    const session = await getServerSession(authOptions)
-
+    const {isSidebarOpen, setIsSidebarOpen} = useSidebarContext()
 
     return (
-        <div className="h-full bg-gray-200 w-full flex flex-col shadow">
-            <div className="w-full h-16 bg-gray-200 flex justify-end items-center px-2 border-b-4 border-b-zinc-50">
-                <div className="flex gap-2 items-center h-full py-2">
-                    <div className="py-2 border-r h-full border-slate-800 text-center flex items-center justify-center opacity-75">
-                        <p className="text-lg text-white opacity-100 px-4">Messages</p>
-                    </div>
-                    {session?.user?.image &&  <Image src={session?.user?.image} alt="user image" width={28} height={28} className="rounded-full ml-2"/>}
-                    <p className=" text-white">{session?.user?.name}</p>
+        <div className={`h-full bg-gray-200 ${isSidebarOpen ? 'hidden' : 'w-full'} md:flex-1 w-full md:flex flex-col shadow overflow-x-auto`}>
+            <div className="w-full h-12 md:h-16 bg-gray-200 flex justify-start items-center px-2 border-b-4 border-b-zinc-50">
+                <div className="" onClick={() => setIsSidebarOpen(isSidebarOpen => !isSidebarOpen)}>
+                    <SidebarClose className={`w-7 h-7 text-gray-500 cursor-pointer md:hidden ${isSidebarOpen && 'hidden' }`} />
+                    <h1>MAIIIN</h1>
                 </div>
             </div>
         </div>
