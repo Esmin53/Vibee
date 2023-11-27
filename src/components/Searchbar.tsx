@@ -24,7 +24,7 @@ const SearchBar = () => {
 
     const searchBarRef = useRef<HTMLDivElement>(null)
 
-     const { mutate: search, isPending } = useMutation({
+     const { mutate: search } = useMutation({
         mutationFn: async () => {
             setIsLoading(true)
             const response =await fetch(`http://localhost:3000/api/accounts?q=${input}`) 
@@ -33,11 +33,11 @@ const SearchBar = () => {
 
             if(data.length - 1 <= 0) setData([])
             setData(data)
-            setIsLoading(false)
         },
         onSettled: async () => {
             if(!input.trim()) {
                 setData([])
+                setIsLoading(false)
             }
         }
      })
@@ -83,7 +83,7 @@ const SearchBar = () => {
              text-gray-600 py-2 flex-col relative">
                 <Ghost className="aboslute text-gray-400 w-12 h-12" />
                 <p>No results</p>
-                </div> : null}
+    </div> : null}
             <div className="w-full h-auto px-2 bg-gray-100 rounded-md">
                 {data.length > 0 && data?.map((item, index) => {
                     if(index === 7) {
@@ -93,8 +93,8 @@ const SearchBar = () => {
                             </Link>
                     }
 
-                    return <Link href={`/users/accounts/${item.id}`} key={index} className="w-full py-1 gap-2 cursor-pointer"> 
-                        <UserCard {...item} />No results
+                    return <Link href={`/messages/${item.id}`} key={index} className="w-full py-1 gap-2 cursor-pointer"> 
+                        <UserCard {...item} />
                     </Link> 
                 })}
             </div>

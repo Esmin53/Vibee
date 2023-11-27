@@ -3,6 +3,7 @@
 import { useSidebarContext } from "@/app/context/context"
 import SearchBar from "./Searchbar"
 import { Button } from "./ui/button"
+import Chats from "./chat/Chats"
 
 //bg-[#bdc1c5]
 
@@ -15,6 +16,7 @@ const UtilityBar = () => {
             w-full sm:w-52 lg:w-80`}>
             <SearchBar />
             <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
+            <Chats />
         </div>
     )
 }

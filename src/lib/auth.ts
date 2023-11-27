@@ -17,5 +17,35 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/sign-in'
     },
-    secret: process.env.JWT_SECRET
+    secret: process.env.JWT_SECRET,
+    callbacks: {
+        session: async ({ session, token }) => {
+          if (session?.user) {
+            session.user.id = token.id
+            session.user.name = token.name
+            session.user.email = token.email
+            session.user.image = token.picture
+          }
+          return session;
+        },
+        jwt: async ({ user, token }) => {
+            const dbUser = await db.user.findFirst({
+                where: {
+                    email: token.email
+                }
+            })
+
+            if (!dbUser) {
+                token.id = user!.id
+                return token
+              }
+
+          return {
+            id: dbUser.id,
+            name: dbUser.name,
+            email: dbUser.email,
+            picture: dbUser.image
+          }
+        },
+      },
 }

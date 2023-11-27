@@ -19,7 +19,6 @@ const Sidebar = () => {
             <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gray-200 rounded-md flex items-center justify-center 
             cursor-pointer text-gray-500 md:hidden" onClick={() => {
                 setIsSidebarOpen(isSidebarOpen => !isSidebarOpen)
-                console.log(isSidebarOpen)
             }}>
                 <SidebarOpen />
             </div>
@@ -28,9 +27,6 @@ const Sidebar = () => {
             </Link>
             <Link href="/messagerequests" className={`w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 ${currentPage === 'messagerequests' ? 'bg-green-600' : 'bg-gray-200'} rounded-md flex items-center justify-center cursor-pointer`}>
                 <MailQuestion className={`w-5 h-5 sm:w-7 sm:h-7 ${currentPage === 'messagerequests' ? 'text-gray-50' : 'text-gray-500'}`}/>
-            </Link>
-            <Link href="/friendrequests" className={`w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 ${currentPage === 'friendrequests' ? 'bg-green-600' : 'bg-gray-200'} rounded-md flex items-center justify-center cursor-pointer`}>
-                <UserPlus className={`w-5 h-5 sm:w-7 sm:h-7 ${currentPage === 'friendrequests' ? 'text-gray-50' : 'text-gray-500'}`}/>
             </Link>
             <Link href="/groups" className={`w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 ${currentPage === 'groups' ? 'bg-green-600' : 'bg-gray-200'} rounded-md flex items-center justify-center cursor-pointer`}>
                 <Users className={`w-5 h-5  sm:w-7 sm:h-7 ${currentPage === 'groups' ? 'text-gray-50' : 'text-gray-500'}`}/>
