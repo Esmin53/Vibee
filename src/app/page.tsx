@@ -1,28 +1,84 @@
-import { Button } from "@/components/ui/button";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import Conversation from "@/components/Conversation";
+import Main from "@/components/Main";
+import Request from "@/components/Request";
+import Requests from "@/components/Requests";
+import Sidebar from "@/components/Sidebar";
+import UtilityBar from "@/components/UtilityBar";
+import CreateGroup from "@/components/dashboard/CreateGroup";
+import UserInfo from "@/components/dashboard/UserInfo";
+import { Mail, MailQuestion } from "lucide-react";
 
 export default async function Home() {
 
-  const session = await getServerSession(authOptions)
-
-  if(session) {
-    redirect("/messages")
-  }
-
-  //console.log(session)
-
   return (
-    <main className="flex justify-center items-center h-screen">
-        <div className="w-1/2 flex items-center justify-center h-full flex-col px-6 gap">
-          <h1 className="text-5xl font-semibold">Welcome to <span className="text-green-600 font-bold">Vibee</span></h1>
-          <p className="text-xl text-gray-600">Free and secure text messaging app! Chat with anyone anywhere in the world.</p>
-          <Button className="mt-6 w-40 py-6">Get Started</Button>
+    <div className="flex w-full h-screen">
+      <Sidebar />
+      <Main>
+        <div className="h-full w-full flex justify-center items-center p-2 ">
+          <div className="h-full w-full flex gap-2 p-2 ">
+              <div className="w-1/3 h-full px-2 flex flex-col">
+                <UserInfo />
+                <hr className="h-0 border-b border-gray-300 mx-3 my-4 opacity-80 shadow" />
+                <CreateGroup />
+              </div>
+
+              <div className="w-2/3 h-full flex gap-2">
+              
+              <div className="w-3/5 h-full bg-zinc-100 shadow-sm flex flex-col gap-2 p-2">
+                <div className="w-full h-6 px-1 flex justify-between items-center">
+                  <p className="text-xl font-semibold">Messages</p>
+
+                  <div className="w-16 h-7 bg-gray-200 rounded-sm flex items-center justify-between px-1 shadow-sm">
+                        <Mail className="text-gray-500 font-semibold w-6 h-6"/>
+                        <p className="font-semibold">27</p>
+                    </div>
+                </div>
+
+                <hr className="h-0 border-b border-gray-300 mx-2 opacity-80 shadow" />
+
+                <Conversation />
+                <Conversation />
+                <Conversation />
+                <Conversation />
+              </div>
+
+              <hr className="h-full border-r-2 border-gray-300 ml-2 opacity-80 shadow" />
+
+              <div className="w-2/5 h-full flex flex-col gap-2">
+                <div className="w-full h-6 flex items-center px-2 justify-between">
+                    <p className="text-xl font-semibold">Message requests</p>
+                    <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1">
+                        <MailQuestion className="text-gray-500 font-semibold w-6 h-6"/>
+                        <p className="font-semibold">27</p>
+                    </div>
+
+                </div>
+
+                <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
+                <div className="h-full p-2 flex flex-col gap-2">
+                  <Request />
+                  <Request />
+                  <Request />
+                  <Request />
+                  <Request />
+                  <Request />
+                  <Request />
+                  <Request />
+                </div>  
+              </div>
+
+              </div>
+
+
+
+
+
+
+
+          </div>
         </div>
-        <div className="w-1/2 h-full">
-        </div> 
-    </main>
+      </Main>
+      <UtilityBar />
+    </div>
   )
 }

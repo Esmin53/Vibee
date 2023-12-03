@@ -16,8 +16,6 @@ const Message = ({text, image, name, createdAt, senderId}: ExtendedMessage) => {
     const session = useSession()
 
     const userId = session.data?.user.id
-    console.log("Sender: ", senderId),
-    console.log("User: ", userId)
 
     return (
         <div className={`w-full flex ${senderId === userId ? 'justify-end' : 'justify-start'}`}>

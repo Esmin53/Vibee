@@ -26,7 +26,7 @@ const ChatBar = () => {
         }
     })
 
-    return <div className="sticky bottom-0 left-0 flex items-center justify-center p-2 w-full h-auto shadow-xl">
+    return <div className="sticky bottom-0 left-0 flex items-center justify-center p-2 w-full h-auto shadow-xl bg-gray-200">
         <form className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl flex items-center gap-1" autoFocus>
             <Textarea className="h-10 resize-none py-3" onChange={(e) => setInput(e.target.value)}
             placeholder="Write a message" rows={1} maxRows={4} />

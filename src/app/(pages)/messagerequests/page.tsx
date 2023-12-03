@@ -6,7 +6,6 @@ import Requests from "@/components/Requests"
 const MessageRequests = () => {
     
     return (
-        <div className="flex h-screen flex-1">
             <Main>
                 <div className="w-full h-full flex gap-2 p-2">
                     <div className="flex flex-col w-1/3 gap-2 pb-2">
@@ -18,7 +17,6 @@ const MessageRequests = () => {
                     </div>
                 </div>
             </Main>
-        </div>
     )
 }
 

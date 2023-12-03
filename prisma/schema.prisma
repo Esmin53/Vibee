@@ -109,7 +109,7 @@ model Message {
   request         MessageRequest? @relation(fields: [requestId], references: [id])
 
   
-  @@unique([senderId, recieverId, conversationId])
+  //@@unique([senderId, recieverId, conversationId])
   
 
   text          String

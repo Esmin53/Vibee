@@ -1,6 +1,5 @@
 "use client"
 
-import type { Message as MessageType } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -27,7 +26,7 @@ const Messages = () => {
     }, [])
 
     return (
-        <div className="flex w-full justify-center items-end h-full">
+        <div className="flex w-full justify-end items-center h-full flex-col relative">
             <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl gap-1 h-full flex justify-end flex-col ">
                 {messages && messages.map((item, index) => {
                     //@ts-ignore

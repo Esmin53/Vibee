@@ -3,7 +3,6 @@ import { db } from "@/lib/db"
 import { MessageValidator } from "@/lib/validators/message"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
-import { z } from "zod"
 
 export const POST = async (req: Request) => {
     try {
@@ -17,8 +16,7 @@ export const POST = async (req: Request) => {
             return new NextResponse(JSON.stringify("Unauthorised"), { status: 401 })
         }
 
-        console.log(session.user.id)
-
+        // This part checks if a conversation between the two users already exists
         const conversation = await db.conversation.findFirst({
             where: {
                 OR: [
@@ -36,16 +34,27 @@ export const POST = async (req: Request) => {
             
         })
 
+        //If yes Then it skips this entire block of code (37 - 114) if no then it runs if statement below
         if(!conversation) {
+
+            // Since there is no conversation created from before this part checks if one user messaged the other before,
             let request = await db.messageRequest.findFirst({
                 where: {
-                    senderId: session.user.id,
-                    recieverId: recieverId ,                    
+                    OR: [
+                        {
+                            senderId: recieverId,
+                            recieverId: session.user.id
+                        },
+                        {
+                            recieverId: recieverId,
+                            senderId: session.user.id
+                        }
+                    ]              
                 }
             })
-
-            if(!request) {
-                
+            
+            // If no then it creates new message request in the db
+            if(!request) {  
                 request = await db.messageRequest.create({
                 data: {
                     senderId: session.user.id,
@@ -55,6 +64,8 @@ export const POST = async (req: Request) => {
             })
             }
 
+            //If there already is request in the db - and reciever is logged in user (one sending this message) 
+            //then this creates new CONVERSATION in the database 
             if(request && request.recieverId === session.user.id) {
                 const conversation = await db.conversation.create({
                     data: {
@@ -63,6 +74,7 @@ export const POST = async (req: Request) => {
                     }
                 })
 
+                //This updates all messages sent by user that sent message request with newly created conversation id
                 await db.message.updateMany({
                     where: {
                         requestId: request.id
@@ -72,6 +84,7 @@ export const POST = async (req: Request) => {
                     }
                 })
 
+                //This creates new message with conversationId = newly created conversation id
                 const message = await db.message.create({
                     data: {
                         senderId: session.user.id,
@@ -80,10 +93,17 @@ export const POST = async (req: Request) => {
                         conversationId: conversation.id
                     }
                 })
+
+                await db.messageRequest.delete({
+                    where: {
+                        id: request.id
+                    }
+                })
     
                 return new NextResponse(JSON.stringify(message), { status: 200 })
             }
 
+            // If the message is sent by the same user that initiated the conversation (sent previous messages) this creates new message with same requestId
             const message = await db.message.create({
                 data: {
                     senderId: session.user.id,
@@ -96,6 +116,7 @@ export const POST = async (req: Request) => {
             return new NextResponse(JSON.stringify(message), { status: 200 })
         }
 
+        //If there is already a conversation this creates new message
         const message = await db.message.create({
             data: {
                 senderId: session.user.id,
@@ -105,8 +126,8 @@ export const POST = async (req: Request) => {
             }
         })
 
-        return new NextResponse(JSON.stringify(message), {status: 200})
+        return new NextResponse(JSON.stringify(message), {status: 200} )
     } catch (error) {
-        console.log(error)
+        return new NextResponse(JSON.stringify(error), { status: 400 } )
     }
 }
