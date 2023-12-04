@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
             session.user.email = token.email
             session.user.image = token.picture
           }
-          return session;
+          return Promise.resolve(session);
         },
         jwt: async ({ user, token }) => {
             const dbUser = await db.user.findFirst({

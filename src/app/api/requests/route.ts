@@ -15,14 +15,20 @@ export const GET = async () => {
             where: {
                 recieverId: session.user.id
             },
-            include: {
-                messages: true,
-                sender: true
+            select: {
+                sender: {
+                    select: {
+                        name: true,
+                        image: true,
+                        id: true
+                    }
+                }
             }
         })
     
         return new NextResponse(JSON.stringify(requests), { status: 200 })
     } catch (error) {
         console.log(error)
+        return new NextResponse(JSON.stringify(error), { status: 400 })
     }
 }

@@ -1,6 +1,6 @@
 import Conversation from "@/components/Conversation";
+import Groups from "@/components/Groups";
 import Main from "@/components/Main";
-import Request from "@/components/Request";
 import Requests from "@/components/Requests";
 import Sidebar from "@/components/Sidebar";
 import UtilityBar from "@/components/UtilityBar";
@@ -20,6 +20,7 @@ export default async function Home() {
                 <UserInfo />
                 <hr className="h-0 border-b border-gray-300 mx-3 my-4 opacity-80 shadow" />
                 <CreateGroup />
+                <Groups />
               </div>
 
               <div className="w-2/3 h-full flex gap-2">
@@ -44,28 +45,9 @@ export default async function Home() {
 
               <hr className="h-full border-r-2 border-gray-300 ml-2 opacity-80 shadow" />
 
-              <div className="w-2/5 h-full flex flex-col gap-2">
-                <div className="w-full h-6 flex items-center px-2 justify-between">
-                    <p className="text-xl font-semibold">Message requests</p>
-                    <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1">
-                        <MailQuestion className="text-gray-500 font-semibold w-6 h-6"/>
-                        <p className="font-semibold">27</p>
-                    </div>
-
-                </div>
-
                 <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
-                <div className="h-full p-2 flex flex-col gap-2">
-                  <Request />
-                  <Request />
-                  <Request />
-                  <Request />
-                  <Request />
-                  <Request />
-                  <Request />
-                  <Request />
-                </div>  
-              </div>
+                <Requests />
+
 
               </div>
 

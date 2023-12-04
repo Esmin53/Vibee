@@ -1,5 +1,7 @@
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { pusherServer } from "@/lib/pusher"
+import { toPusherKey } from "@/lib/utils"
 import { MessageValidator } from "@/lib/validators/message"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
@@ -62,6 +64,16 @@ export const POST = async (req: Request) => {
                     status: "PENDING"
                 }
             })
+
+            await pusherServer.trigger(
+                toPusherKey(`user:${recieverId}:incoming_messages`), 
+                'incoming_messages', 
+                {
+                    "name": session.user.name,
+                    "image": session.user.image ,
+                    "id": session.user.id
+                }
+            )
             }
 
             //If there already is request in the db - and reciever is logged in user (one sending this message) 
@@ -103,7 +115,9 @@ export const POST = async (req: Request) => {
                 return new NextResponse(JSON.stringify(message), { status: 200 })
             }
 
-            // If the message is sent by the same user that initiated the conversation (sent previous messages) this creates new message with same requestId
+            // If the message is sent by the same user that initiated the conversation (sent previous messages) 
+            // this creates new message with same requestId
+
             const message = await db.message.create({
                 data: {
                     senderId: session.user.id,
@@ -112,6 +126,7 @@ export const POST = async (req: Request) => {
                     requestId: request.id
                 }
             })
+
 
             return new NextResponse(JSON.stringify(message), { status: 200 })
         }
@@ -128,6 +143,7 @@ export const POST = async (req: Request) => {
 
         return new NextResponse(JSON.stringify(message), {status: 200} )
     } catch (error) {
+        console.log(error)
         return new NextResponse(JSON.stringify(error), { status: 400 } )
     }
 }
