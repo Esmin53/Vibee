@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { Ghost, Loader, MailQuestion } from "lucide-react"
+import { ChevronDown, Ghost, Loader, MailQuestion } from "lucide-react"
 import { useEffect, useState } from "react"
 import Request from "./Request"
 
@@ -67,7 +67,7 @@ const { mutate: getRequests} = useMutation({
     }, [session])
 
     if(isLoading) {
-        return  <div className="w-2/5 h-full flex flex-col gap-2">
+        return  <div className="md:w-2/5 w-full h-full flex flex-col gap-2">
         <div className="w-full h-6 flex items-center px-2 justify-between">
             <p className="text-xl font-semibold">Message requests</p>
             <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1 animate-pulse">
@@ -83,19 +83,21 @@ const { mutate: getRequests} = useMutation({
     }
 
     if(requests.length === 0 && !isLoading) {
-        return         <div className="w-2/5 h-full flex flex-col gap-2">
-        <div className="w-full h-6 flex items-center px-2 justify-between">
-            <p className="text-xl font-semibold">Message requests</p>
-            <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1">
+        return  <div className="md:w-2/5 w-full h-fit flex flex-col gap-2 py-1">
+        <div className="w-full h-6 flex items-center px-2">
+            <p className="md:text-xl text-md font-semibold">Message requests</p>
+            <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1 ml-auto">
                 <MailQuestion className="text-gray-500 font-semibold w-6 h-6"/>
                 <p className="font-semibold">{requests.length}</p>
             </div>
+            <ChevronDown className="flex h-full justify-center items-center text-gray-500"/>
         </div>
 
         <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
-        <div className="w-full h-full max-h-72 flex flex-col justify-center items-center bg-zinc-100 rounded-md">
-            <p className="text-center text-gray-400 px-1 font-semibold">No new message requests at the moment. <br /> Check back later!</p>
-            <Ghost className="w-16 h-16 text-gray-400"/>
+        <div className="w-full md:h-full max-h-72 flex flex-col justify-center items-center bg-zinc-100 rounded-md">
+            <p className="text-center text-gray-400 px-1 font-semibold md:text-md text-xs">
+                No new message requests at the moment. <br /> Check back later!</p>
+            <Ghost className="md:w-16 md:h-16 h-8 w-8 text-gray-400"/>
         </div>
       </div> 
     }
@@ -103,7 +105,7 @@ const { mutate: getRequests} = useMutation({
     
 
     return (
-        <div className="w-2/5 h-full flex flex-col gap-2 ">
+        <div className="md:w-2/5 w-full h-full flex flex-col gap-2 ">
         <div className="w-full h-6 flex items-center px-2 justify-between">
             <p className="text-xl font-semibold">Message requests</p>
             <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1">
