@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import Message from "./Message"
 import { ExtendedMessage } from "@/types/db"
+import { pusherClient } from "@/lib/pusher"
+import { toPusherKey } from "@/lib/utils"
 
 const Messages = () => {
     const [messages, setMessages] = useState<ExtendedMessage[] >()
@@ -24,6 +26,23 @@ const Messages = () => {
         getMessages()
 
     }, [])
+
+    useEffect(() => {
+        pusherClient.subscribe(toPusherKey(`user:${pathname.split('/')[2]}:incoming_message`))
+
+        //@ts-ignore
+    const messagesHandler = () => {
+        console.log("New message")
+           
+    }
+
+        pusherClient.bind('incoming_message', messagesHandler)
+
+        return () => {
+            pusherClient.unsubscribe(toPusherKey(`user:${pathname.split('/')[2]}:`))
+            pusherClient.unbind('incoming_message', messagesHandler)
+        }
+    })
 
     return (
         <div className="flex w-full justify-end items-center h-full flex-col relative">

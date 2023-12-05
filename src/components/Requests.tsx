@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { Ghost, MailQuestion } from "lucide-react"
+import { Ghost, Loader, MailQuestion } from "lucide-react"
 import { useEffect, useState } from "react"
 import Request from "./Request"
 
@@ -20,7 +20,7 @@ type Request = {
 
 const Requests = () => {
     const [requests, setRequests] = useState<Request[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const session = useSession()
 
 const { mutate: getRequests} = useMutation({
@@ -35,14 +35,20 @@ const { mutate: getRequests} = useMutation({
     onSettled() {
         setIsLoading(false)
     },
+    onError() {
+        setIsLoading(false)
+    },
 
 })
-
 
     useEffect(() => {
         getRequests()
 
-        pusherClient.subscribe(toPusherKey(`user:${session.data?.user.id}:incoming_messages`))
+    }, [])
+
+    useEffect(() => {
+
+        pusherClient.subscribe(toPusherKey(`user:${session.data?.user.id}:incoming-requests`))
 
                 //@ts-ignore
             const messagesHandler = ({name, image, id}) => {
@@ -52,15 +58,31 @@ const { mutate: getRequests} = useMutation({
                 }}])            
             }
     
-        pusherClient.bind('incoming_messages', messagesHandler)
+        pusherClient.bind('incoming-requests', messagesHandler)
 
         return () => {
-            pusherClient.unsubscribe(toPusherKey(`user:${session.data?.user.id}:incoming_messages`))
-            pusherClient.unbind('incoming_messages', messagesHandler)
+            pusherClient.unsubscribe(toPusherKey(`user:${session.data?.user.id}:incoming-requests`))
+            pusherClient.unbind('incoming-requests', messagesHandler)
         }
     }, [session])
 
-    if(requests.length === 0) {
+    if(isLoading) {
+        return  <div className="w-2/5 h-full flex flex-col gap-2">
+        <div className="w-full h-6 flex items-center px-2 justify-between">
+            <p className="text-xl font-semibold">Message requests</p>
+            <div className="w-16 h-7 bg-zinc-100 rounded-sm flex items-center justify-between px-1 animate-pulse">
+
+            </div>
+        </div>
+
+        <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
+        <div className="w-full h-full max-h-64 flex justify-center items-center bg-zinc-100 rounded-md">
+            <Loader className="w-16 h-16 text-gray-200 " />
+        </div>
+      </div>       
+    }
+
+    if(requests.length === 0 && !isLoading) {
         return         <div className="w-2/5 h-full flex flex-col gap-2">
         <div className="w-full h-6 flex items-center px-2 justify-between">
             <p className="text-xl font-semibold">Message requests</p>
@@ -71,8 +93,9 @@ const { mutate: getRequests} = useMutation({
         </div>
 
         <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
-        <div className="w-full h-full flex justify-center items-center">
-            <Ghost className="w-20 h-20 text-gray-400"/>
+        <div className="w-full h-full max-h-72 flex flex-col justify-center items-center bg-zinc-100 rounded-md">
+            <p className="text-center text-gray-400 px-1 font-semibold">No new message requests at the moment. <br /> Check back later!</p>
+            <Ghost className="w-16 h-16 text-gray-400"/>
         </div>
       </div> 
     }

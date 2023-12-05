@@ -65,15 +65,6 @@ export const POST = async (req: Request) => {
                 }
             })
 
-            await pusherServer.trigger(
-                toPusherKey(`user:${recieverId}:incoming_messages`), 
-                'incoming_messages', 
-                {
-                    "name": session.user.name,
-                    "image": session.user.image ,
-                    "id": session.user.id
-                }
-            )
             }
 
             //If there already is request in the db - and reciever is logged in user (one sending this message) 
@@ -127,6 +118,15 @@ export const POST = async (req: Request) => {
                 }
             })
 
+            await pusherServer.trigger(
+                toPusherKey(`user:${recieverId}:incoming-requests`), 
+                'incoming-requests', 
+                {
+                    "name": session.user.name,
+                    "image": session.user.image ,
+                    "id": session.user.id
+                }
+            )
 
             return new NextResponse(JSON.stringify(message), { status: 200 })
         }
@@ -140,6 +140,7 @@ export const POST = async (req: Request) => {
                 conversationId: conversation.id
             }
         })
+        
 
         return new NextResponse(JSON.stringify(message), {status: 200} )
     } catch (error) {

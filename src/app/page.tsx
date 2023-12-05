@@ -20,7 +20,6 @@ export default async function Home() {
                 <UserInfo />
                 <hr className="h-0 border-b border-gray-300 mx-3 my-4 opacity-80 shadow" />
                 <CreateGroup />
-                <Groups />
               </div>
 
               <div className="w-2/3 h-full flex gap-2">

@@ -66,7 +66,6 @@ export const GET = async (req: Request) => {
             return new NextResponse( JSON.stringify(messages), { status: 200 } )
         }
 
-        return new NextResponse( JSON.stringify('Not Found'), { status: 404 } )
     } catch (error) {
         console.log(error)
     }
