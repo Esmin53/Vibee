@@ -51,9 +51,6 @@ model User {
   sentMessages  Message[] @relation("SentMessages")
   recievedMessages Message[] @relation("RecievedMessages")
 
-  sentRequest MessageRequest[] @relation("SentRequest")
-  recievedRequest MessageRequest[] @relation("RecievedRequest")
-
   User1 Conversation[] @relation("User1")
   User2 Conversation[] @relation("User2")
 }
@@ -72,6 +69,11 @@ enum RequestStatus {
   REJECTED
 }
 
+enum ConversationType {
+  REQUEST
+  CONVERSATION
+}
+
 model Conversation {
   messages  Message[] 
   UserAId      String
@@ -80,19 +82,9 @@ model Conversation {
   UserBId    String
   reciever      User      @relation("User2", fields: [UserBId], references: [id]) 
 
+  Status    ConversationType    @default(REQUEST)
+
   id  String @id @default(cuid())
-}
-
-model MessageRequest {
-  id    String  @id   @default(cuid())
-
-  senderId      String
-  sender        User      @relation("SentRequest",fields: [senderId], references: [id])    
-
-  recieverId    String
-  reciever      User      @relation("RecievedRequest", fields: [recieverId], references: [id]) 
-  status      RequestStatus
-  messages      Message[]
 }
 
 model Message {
@@ -105,10 +97,6 @@ model Message {
 
   conversationId  String?
   conversation    Conversation?  @relation(fields: [conversationId], references: [id])
-  requestId       String?
-  request         MessageRequest? @relation(fields: [requestId], references: [id])
-
-  
   //@@unique([senderId, recieverId, conversationId])
   
 

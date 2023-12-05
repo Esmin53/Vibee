@@ -9,9 +9,8 @@ export default function RootLayout({
 }) {
   return (
     <div className="flex w-full h-screen">
-        <Sidebar />
-        {children}
         <UtilityBar />
+        {children}
     </div>
   )
 }

@@ -31,7 +31,7 @@ export default async function Home() {
 
 
                 <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
-                <Requests />
+               {/* <Requests /> */}
 
         </div>
       </Main>
