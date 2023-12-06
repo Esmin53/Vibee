@@ -28,6 +28,10 @@ const Chats = () => {
         getChats()
     }, [])
 
+    if(!chats || chats.length === 0) {
+        return <div>You have no chats to display</div>
+    }
+
     return (
         <div className="w-full p-2 flex flex-col gap-2">
             <p className="text-md md:text-lg text-gray-500 font-bold px-2">Chats</p>

@@ -46,25 +46,6 @@ const { mutate: getRequests} = useMutation({
 
     }, [])
 
-    useEffect(() => {
-
-        pusherClient.subscribe(toPusherKey(`user:${session.data?.user.id}:incoming-requests`))
-
-                //@ts-ignore
-            const messagesHandler = ({name, image, id}) => {
-                console.log("Test")
-                setRequests(prev => [...prev, {sender: {
-                    name, image, id
-                }}])            
-            }
-    
-        pusherClient.bind('incoming-requests', messagesHandler)
-
-        return () => {
-            pusherClient.unsubscribe(toPusherKey(`user:${session.data?.user.id}:incoming-requests`))
-            pusherClient.unbind('incoming-requests', messagesHandler)
-        }
-    }, [session])
 
     if(isLoading) {
         return  <div className="md:w-2/5 w-full h-full flex flex-col gap-2">

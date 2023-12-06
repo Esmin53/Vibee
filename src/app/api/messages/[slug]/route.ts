@@ -14,58 +14,22 @@ export const GET = async (req: Request) => {
         const url = new URL(req.url)
         const {pathname} = url
 
-        const userId = pathname.split('/')[3]
+        const conversationId = pathname.split('/')[3]
+        console.log(conversationId)
         
-        const conversation = await db.conversation.findFirst({
+        const messages = await db.message.findMany({
             where: {
-                OR: [
-                    {
-                        UserAId: userId,
-                        UserBId: session.user.id
-                    },
-                    {
-                        UserBId: userId,
-                        UserAId: session.user.id
-                    }
-                ]
-            }
+                conversationId
+            },
+            include: {
+                sender: true,
+                reciever: true
+            },
+
         })
 
-        if(conversation) {
-            const messages = await db.message.findMany({
-                where: {
-                    conversationId: conversation.id
-                },
-                include: {
-                    sender: true,
-                    reciever: true
-                }
-            })
-
             return new NextResponse( JSON.stringify(messages), { status: 200 } )
-        } else {
-            const messages = await db.message.findMany({
-                where: {
-                    OR: [
-                        {
-                            senderId: userId,
-                            recieverId: session.user.id
-                        },
-                        {
-                            senderId: session.user.id,
-                            recieverId: userId
-                        }
-                    ]
-                },
-                include: {
-                    sender: true,
-                    reciever: true
-                }
-            })
-
-            return new NextResponse( JSON.stringify(messages), { status: 200 } )
-        }
-
+         
     } catch (error) {
         console.log(error)
     }

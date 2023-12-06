@@ -1,11 +1,4 @@
-import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
-import { pusherServer } from "@/lib/pusher"
-import { toPusherKey } from "@/lib/utils"
-import { MessageValidator } from "@/lib/validators/message"
-import { getServerSession } from "next-auth"
-import { NextResponse } from "next/server"
-
+/*
 export const POST = async (req: Request) => {
     try {
         const body = await req.json()
@@ -147,4 +140,4 @@ export const POST = async (req: Request) => {
         console.log(error)
         return new NextResponse(JSON.stringify(error), { status: 400 } )
     }
-}
+}*/

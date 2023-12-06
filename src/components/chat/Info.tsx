@@ -15,7 +15,7 @@ const Info = async ({userId}: PageProps) => {
 
     const data: User = await response.json()
 
-    return  <div className="w-full flex justify-center sticky top-0 mt-2 z-50 bg-gray-200">
+    return  <div className="w-full flex justify-center sticky top-0 mt-2 z-40 bg-gray-200">
     <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl h-12 flex 
     border-b-2 border-gray-300 opacity-75 shadow-b">
         <div className="flex gap-2 items-center">

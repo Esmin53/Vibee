@@ -12,7 +12,7 @@ const UtilityBar = () => {
     const {isSidebarOpen} = useSidebarContext()
 
     return <div className={`${isSidebarOpen ? 'md:flex flex-col' : 'hidden md:flex flex-col'} absolute top-0 left-0 z-50 w-screen h-screen md:relative 
-        md:w-60 lg:w-80 bg-gray-200 border-r border-gray-300`}>
+        md:w-60 lg:w-80 bg-gray-200 border-r border-gray-300 `}>
             <div className="flex gap-2 w-full items-center px-2">
                 <SearchBar />
                 <ToggleSidebar />

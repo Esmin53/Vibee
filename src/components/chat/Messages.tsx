@@ -5,51 +5,59 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import Message from "./Message"
 import { ExtendedMessage } from "@/types/db"
+import { Conversation } from "@prisma/client"
+import { Loader2 } from "lucide-react"
 import { pusherClient } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
 
-const Messages = () => {
+const Messages = (conversation: Conversation) => {
     const [messages, setMessages] = useState<ExtendedMessage[] >()
-    const pathname = usePathname()
 
     const {mutate: getMessages} = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`http://localhost:3000/api/messages/${pathname.split('/')[2]}`)
+            const response = await fetch(`http://localhost:3000/api/messages/${conversation.id}`)
 
             const messages = await response.json()
 
             setMessages(messages)
+
         }
     })
 
     useEffect(() => {
         getMessages()
-
     }, [])
 
     useEffect(() => {
-        pusherClient.subscribe(toPusherKey(`user:${pathname.split('/')[2]}:incoming_message`))
 
-        //@ts-ignore
-    const messagesHandler = () => {
-        console.log("New message")
-           
-    }
-
-        pusherClient.bind('incoming_message', messagesHandler)
+        pusherClient.subscribe(toPusherKey(`conversation:${conversation.id}`))
+        
+            const messagesHandler = (message: ExtendedMessage) => {
+                setMessages((prev) => [...prev!, message])  
+                console.log("Test")
+            }
+    
+        pusherClient.bind(`incoming-message`, messagesHandler)
 
         return () => {
-            pusherClient.unsubscribe(toPusherKey(`user:${pathname.split('/')[2]}:`))
-            pusherClient.unbind('incoming_message', messagesHandler)
+            pusherClient.unsubscribe(toPusherKey(`conversation:${conversation.id}`))
+            pusherClient.unbind('incoming-message', messagesHandler)
         }
-    })
+    }, [])
+
+    if(!messages) {
+        return ( <div className="flex w-full justify-center items-center h-full flex-col relative">
+            <Loader2 className="w-16 h-16 text-gray-400 animate-spin" />  
+        </div>)
+    }
 
     return (
-        <div className="flex w-full justify-end items-center h-full flex-col relative">
-            <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl gap-1 h-full flex justify-end flex-col ">
-                {messages && messages.map((item, index) => {
+        <div className="flex w-full justify-end items-center h-full flex-col relative overflow-x-hidden">
+            <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1
+              max-h-full h-fit overflow-y-scroll">
+                {messages.map((item, index) => {
                     //@ts-ignore
-                    return <Message {...item} name={item.sender.name} image={item.sender.image} />
+                    return <Message key={index} {...item} name={item.sender.name} image={item.sender.image} />
                 })}
             </div>
         </div>
