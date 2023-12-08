@@ -12,10 +12,12 @@ export const GET = async (req: Request) => {
         }
 
         const url = new URL(req.url)
+        //@ts-ignore
+        let page: number = url.searchParams.get('page')
         const {pathname} = url
 
         const conversationId = pathname.split('/')[3]
-        console.log(conversationId)
+        console.log(page)
         
         const messages = await db.message.findMany({
             where: {
@@ -25,6 +27,11 @@ export const GET = async (req: Request) => {
                 sender: true,
                 reciever: true
             },
+            skip: (page - 1) * 20,
+            take: 20,
+            orderBy: {
+                createdAt: 'desc'
+            }
 
         })
 
