@@ -1,6 +1,7 @@
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { getServerSession } from "next-auth"
+import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export const GET = async (req: Request) => {
@@ -17,7 +18,6 @@ export const GET = async (req: Request) => {
         const {pathname} = url
 
         const conversationId = pathname.split('/')[3]
-        console.log(page)
         
         const messages = await db.message.findMany({
             where: {

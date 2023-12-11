@@ -5,16 +5,20 @@ import { Button } from "../ui/button"
 import { Textarea } from "../ui/textarea"
 import { RefObject, useEffect, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { usePathname } from "next/navigation"
-import { pusherClient } from "@/lib/pusher"
-import { toPusherKey } from "@/lib/utils"
+import { redirect, usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
-const ChatBar = () => {
+
+
+const ChatBar = ({conversationId}: {conversationId: string | null}) => {
     const [input, setInput] = useState<string>("")
     const textareaRef = useRef<HTMLTextAreaElement>(null) as RefObject<HTMLTextAreaElement>;
     const session = useSession()
     const pathname = usePathname()
+    const router = useRouter()
+
 
     const {mutate: sendMessage} = useMutation({
         mutationFn: async () => {
@@ -33,6 +37,12 @@ const ChatBar = () => {
             if (textareaRef.current) {
                 textareaRef.current.value = "";
               }
+             
+            if(conversationId === null) {
+                console.log("Suii")
+                router.push(`/messages/${pathname.split('/')[2]}`)
+            }
+
         }
     })
 

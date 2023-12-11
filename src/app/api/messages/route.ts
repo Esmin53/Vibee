@@ -5,6 +5,7 @@ import { toPusherKey } from "@/lib/utils"
 import { MessageValidator } from "@/lib/validators/message"
 import { data } from "autoprefixer"
 import { getServerSession } from "next-auth"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export const GET = async (req: Request) => {
@@ -41,6 +42,8 @@ export const GET = async (req: Request) => {
                 messages: true
             }
         })
+
+        console.log(q)
         
         return new NextResponse(JSON.stringify(conversation), {status: 200})
     } catch (error) {
@@ -86,6 +89,9 @@ export const POST = async (req: Request) => {
                 UserBId: session.user.id
             }
         })
+
+        revalidateTag(`${recieverId}`)
+        revalidatePath(`http://localhost:3000/messages/${recieverId}`)
     }
 
     const message = await db.message.create({
@@ -101,7 +107,6 @@ export const POST = async (req: Request) => {
         }        
     })
     
-    console.log(message)
     await pusherServer.trigger(
         toPusherKey(`conversation:${conversation.id}`), 
         'incoming-message', 

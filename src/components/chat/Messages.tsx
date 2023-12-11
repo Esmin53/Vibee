@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react"
 import { pusherClient } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
 
-const Messages = (conversation: Conversation) => {
+const Messages = ({conversationId}: {conversationId: string | null}) => {
     const [messages, setMessages] = useState<ExtendedMessage[] >([])
     const [isLoading, setIsloading] = useState<boolean >()
     const [page, setPage] = useState<number >(1)
@@ -35,7 +35,7 @@ const Messages = (conversation: Conversation) => {
     const {mutate: getMessages} = useMutation({
         mutationFn: async () => {
             setIsloading(true)
-            const response = await fetch(`http://localhost:3000/api/messages/${conversation.id}?page=${page}`)
+            const response = await fetch(`http://localhost:3000/api/messages/${conversationId}?page=${page}`)
 
             const newMessages = await response.json()
             if(!newMessages.length) {
@@ -62,17 +62,21 @@ const Messages = (conversation: Conversation) => {
 
     useEffect(() => {
 
-        pusherClient.subscribe(toPusherKey(`conversation:${conversation.id}`))
+        pusherClient.subscribe(toPusherKey(`conversation:${conversationId}`))
         
             const messagesHandler = (message: ExtendedMessage) => {
-                console.log("Test")
+                //@ts-ignore
+                if(!conversationId) {
+                    conversationId = message.conversationId
+                    getMessages()
+                }
                 setMessages((prev) => [message, ...prev!])  
             }
     
         pusherClient.bind(`incoming-message`, messagesHandler)
 
         return () => {
-            pusherClient.unsubscribe(toPusherKey(`conversation:${conversation.id}`))
+            pusherClient.unsubscribe(toPusherKey(`conversation:${conversationId}`))
             pusherClient.unbind('incoming-message', messagesHandler)
         }
     }, [])
@@ -81,6 +85,13 @@ const Messages = (conversation: Conversation) => {
         return ( <div className="flex w-full justify-center items-center h-full flex-col relative">
             <Loader2 className="w-16 h-16 text-gray-400 animate-spin" />  
         </div>)
+    }
+
+    if(!messages.length) {
+        return ( <div className="flex w-full justify-center items-center h-full flex-col relative">
+            
+            <h2 className="text-3xl text-gray-400 font-semibold">No previous messages</h2>
+    </div>)
     }
 
     return (

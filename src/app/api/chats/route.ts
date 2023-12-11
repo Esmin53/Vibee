@@ -16,32 +16,38 @@ export const GET = async () => {
             where: {
                 OR: [
                     {
-                        UserBId: session.user.id
+                        UserAId: session.user.id
                     },
                     {
-                        UserAId: session.user.id
+                        UserBId: session.user.id
                     }
-                ],
+                ]
+            },
+            include: {
+                sender: true,
+                reciever: true,
+                    messages: {
+                        orderBy: {
+                            createdAt: 'desc'
+                        },
+                        take: 1,
+                    },
             }
         })
 
-        //@ts-ignore
-        let chats: [] = conversation.map((item) => {
-            if(item.UserAId !== session.user.id) {
-                return item.UserAId
-            } else if(item.UserBId !== session.user.id) {
-                return item.UserBId
-            }
-        })
+        const data: {}[] = conversation
+        .filter(item => item.messages.length > 0) // Filter out items with no messages
+        .map(item => ({
+            name: item.sender.id === session.user.id ? item.reciever.name : item.sender.name,
+            image: item.sender.id === session.user.id ? item.reciever.image : item.sender.image,
+            text: item.messages[0].text,
+            sentAt: item.messages[0].createdAt
+        }));
 
-        const users = await db.user.findMany({
-            where: {
-                id: { in: chats }
-            }, 
-        })
 
-        return new NextResponse(JSON.stringify(users), { status: 200 })
+        return new NextResponse(JSON.stringify(data), { status: 200 })
     } catch (error) {
+        console.log(error)
         return new NextResponse(JSON.stringify(error), { status: 400 })
     }
 }

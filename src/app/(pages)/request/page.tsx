@@ -8,13 +8,7 @@ const MessageRequests = () => {
     return (
             <Main>
                 <div className="w-full h-full flex gap-2 p-2">
-                    <div className="flex flex-col w-1/3 gap-2 pb-2">
-                        <Profile />
-                        <Groups />
-                    </div>
-                    <div className="flex-1 h-full pb-2">
-                        <Requests />
-                    </div>
+                    <p>Requests</p>
                 </div>
             </Main>
     )

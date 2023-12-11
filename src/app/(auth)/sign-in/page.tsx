@@ -2,25 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { useState } from "react"
-import {signIn, useSession} from "next-auth/react"
+import {signIn} from "next-auth/react"
 import Link from "next/link"
 
-
 const SignIn = () => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const signInWithGoogle = async () => {
-        setIsLoading(true)
-        try {
-            
-            await signIn('google')
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const {data} = useSession()
 
     return (
         <div className="w-full min-h-screen flex justify-center items-center">
@@ -34,7 +19,7 @@ const SignIn = () => {
                     <Link href="/sign-up" className="text-emerald-500 font-semibold">{" "}Sign Up</Link></p>
                 </form>
                 <p className="flex my-2"> OR </p>
-                <Button variant="outline" className="w-full h-12 gap-2 shadow" onClick={() => signIn("google")}>
+                <Button variant="outline" className="w-full h-12 gap-2 shadow" onClick={() => signIn('google', { callbackUrl: "http://localhost:3000"})}>
                     <Image src="/google.png" width={20} height={20} alt="google"/>
                     Continue with Google
                 </Button>

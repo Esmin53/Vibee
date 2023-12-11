@@ -4,23 +4,29 @@ import { Conversation as ConversationType, User } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import Conversation from "./Conversation"
-import { useSession } from "next-auth/react"
-import UserAvatar from "./UserAvatar"
-import Link from "next/link"
-
-
+import { Ghost, Loader2 } from "lucide-react"
 
 const Chats = () => {
-    const [chats, setChats] = useState<User[]>()
+    const [isLoading, setIsloading] = useState<boolean >(true)
+    const [chats, setChats] = useState<{
+        name: string
+        image: string
+        text: string
+        sentAt: string
+    }[]>([])
 
     const {mutate: getChats} = useMutation({
         mutationFn: async () => {
+            setIsloading(true)
             const response = await fetch('http://localhost:3000/api/chats')
 
             const data = await response.json()
             setChats(data)
 
-
+            console.log(data)
+        },
+        onSettled: () => {
+            setIsloading(false)
         }
     })
 
@@ -28,21 +34,35 @@ const Chats = () => {
         getChats()
     }, [])
 
-    if(!chats || chats.length === 0) {
-        return <div>You have no chats to display</div>
+    if(isLoading && !chats.length) {
+        return <div className="w-full h-full flex flex-col justify-center items-center">
+        <Loader2 className="w-28 h-28 text-gray-400 animate-spin" />
+        <h2 className="text-2xl text-gray-400 font-semibold">Getting your chatts</h2>
+        <p className="text-gray-400">Please wait</p>
+    </div>
+    }
+
+    if(!chats.length) {
+        return <div className="w-full h-full flex flex-col justify-center items-center">
+            <Ghost className="w-36 h-36 text-gray-400" />
+            <h2 className="text-2xl text-gray-400 font-semibold">Pretty empty in here</h2>
+            <p className="text-gray-400">Try finding some people</p>
+        </div>
     }
 
     return (
-        <div className="w-full p-2 flex flex-col gap-2">
-            <p className="text-md md:text-lg text-gray-500 font-bold px-2">Chats</p>
-            {chats && chats.map((item) => {
-                return <Link href={`/messages/${item.id}`} className="w-full flex gap-2 p-1 hover:bg-zinc-100 rounded-md cursor-pointer"> 
-                    <div className="w-10 h-10">
-                        {item.image && <UserAvatar image={item.image} />}
-                    </div>
-                    <p className="text-lg font-semibold">{item.name}</p>
-                </Link>
-            })}                      
+
+        <div className="flex w-full items-center flex-col py-2 ">
+            <div className="w-full max-w-5xl p-2">
+                <p className="text-2xl text-gray-500 font-semibold">My chats</p>
+            </div>
+            <div className="w-full h-full py-2 flex items-center flex-col">
+                {chats?.map((item) => {
+
+                    return <Conversation name={item.name} text={item.text} image={item.image} sentAt={item.sentAt}/>
+
+                })}
+            </div>
         </div>
     )
 }
