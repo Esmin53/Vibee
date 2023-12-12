@@ -9,11 +9,16 @@ import { redirect, usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { revalidatePath } from "next/cache"
+import { pusherClient } from "@/lib/pusher"
+import { Message } from "@prisma/client"
+import { ExtendedMessage } from "@/types/db"
+import { toPusherKey } from "@/lib/utils"
 
 
 
 const ChatBar = ({conversationId}: {conversationId: string | null}) => {
     const [input, setInput] = useState<string>("")
+    const [message, setMessage] = useState<ExtendedMessage >()
     const textareaRef = useRef<HTMLTextAreaElement>(null) as RefObject<HTMLTextAreaElement>;
     const session = useSession()
     const pathname = usePathname()
@@ -30,18 +35,15 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
                 })
             })
 
-            const data = await response.json()
+            const data: ExtendedMessage = await response.json()
+
+            setMessage(data)
         },
-        onSettled: () => {
+        onSuccess: () => {
             setInput("")
             if (textareaRef.current) {
                 textareaRef.current.value = "";
               }
-             
-            if(conversationId === null) {
-                console.log("Suii")
-                router.push(`/messages/${pathname.split('/')[2]}`)
-            }
 
         }
     })

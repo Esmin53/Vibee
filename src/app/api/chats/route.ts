@@ -41,8 +41,10 @@ export const GET = async () => {
             name: item.sender.id === session.user.id ? item.reciever.name : item.sender.name,
             image: item.sender.id === session.user.id ? item.reciever.image : item.sender.image,
             text: item.messages[0].text,
-            sentAt: item.messages[0].createdAt
-        }));
+            sentAt: item.messages[0].createdAt,
+            senderId: item.messages[0].senderId,
+            conversationId: item.id
+        })).sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime());
 
 
         return new NextResponse(JSON.stringify(data), { status: 200 })

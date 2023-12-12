@@ -42,8 +42,6 @@ export const GET = async (req: Request) => {
                 messages: true
             }
         })
-
-        console.log(q)
         
         return new NextResponse(JSON.stringify(conversation), {status: 200})
     } catch (error) {
@@ -111,6 +109,32 @@ export const POST = async (req: Request) => {
         toPusherKey(`conversation:${conversation.id}`), 
         'incoming-message', 
         message
+    )
+
+    await pusherServer.trigger(
+        toPusherKey(`message:${recieverId}`), 
+        'newest-message', 
+        {
+            name: message.sender.name,
+            image: message.sender.image,
+            text: message.text,
+            sentAt: message.createdAt,
+            senderId: message.senderId,
+            conversationId: message.conversationId
+        }
+    )
+
+    await pusherServer.trigger(
+        toPusherKey(`message:${session.user.id}`), 
+        'newest-message', 
+        {
+            name: message.reciever.name,
+            image: message.reciever.image,
+            text: message.text,
+            sentAt: message.createdAt,
+            senderId: message.senderId,
+            conversationId: message.conversationId
+        }
     )
 
     return new NextResponse(JSON.stringify(message), {status: 200} )

@@ -22,8 +22,6 @@ export const POST = async (req: Request) => {
                 UserBId: session.user.id
             }
         })
-
-        console.log("Conversation: ", conversation)
     
         return new NextResponse(JSON.stringify(conversation), { status: 200 })
     } catch (error) {

@@ -9,10 +9,12 @@ type ConversationProps = {
     name: string
     text: string
     sentAt: string
+    senderId: string
 }
 
-const Conversation = ({image, name, text, sentAt}: ConversationProps) => {
+const Conversation = ({image, name, text, sentAt, senderId}: ConversationProps) => {
     const session = useSession()
+
 
     return (
         <div className="w-full flex gap-4 p-2 cursor-pointer border-y border-gray-300 max-w-4xl shadow-sm">
@@ -24,7 +26,10 @@ const Conversation = ({image, name, text, sentAt}: ConversationProps) => {
                     <p className="text-lg font-semibold">{name && name}</p>
                     <p className="text-xs">{sentAt}</p>
                 </div>
-                <p className="text-sm">{text}</p>
+                <p className="text-sm">
+                    <span className="text-gray-500">{senderId === session.data?.user.id ? "You: " : null}</span>
+                    {text}
+                </p>
             </div>
         </div>
     )
