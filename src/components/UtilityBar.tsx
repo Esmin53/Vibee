@@ -1,28 +1,38 @@
-"use client"
 
-import { useSidebarContext } from "@/app/context/context"
 import SearchBar from "./Searchbar"
-import Chats from "./Chats"
 import { Home, LogOut, Settings, Sun } from "lucide-react"
-import ToggleSidebar from "./SidebarToggle"
 import SignOut from "./SignOut"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
+import Chats from "./Chats"
+import { ConversationType } from "@/types/db"
 
 
-const UtilityBar = () => {
 
-    const {isSidebarOpen} = useSidebarContext()
+const UtilityBar = async () => {
+    const session = await getServerSession(authOptions)
 
-    return <div className={`${isSidebarOpen ? 'md:flex flex-col' : 'hidden md:flex flex-col'} absolute top-0 left-0 z-50 w-screen h-screen md:relative 
-        md:w-60 lg:w-96 bg-gray-200 border-r border-gray-300 `}>
+  if(!session) {
+    redirect('/sign-in')
+  }
+
+  const response = await fetch('http://localhost:3000/api/chats', {
+    cache: 'no-store',
+    headers: headers()
+  })
+
+  const data: ConversationType[] = await response.json()
+
+    return <div className={` h-screen hidden md:flex flex-col
+        md:w-72 lg:w-96 bg-gray-200 border-r border-gray-300 `}>
             <div className="flex gap-2 w-full items-center px-2">
                 <SearchBar />
-                <ToggleSidebar />
             </div>
             <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow" />
-                <Chats />
-            <div className="w-full h-12 flex items-center px-6 text-gray-500 fixed bottom-0 left-0 border-t
-             border-gray-300 justify-between z-50 md:w-60 lg:w-80">
-                
+                <Chats data={data} />
+                <div className="w-full h-12 flex items-center px-6 text-gray-500 fixed bottom-0 left-0 border-t border-gray-300 justify-between z-50 md:w-72 lg:w-96">
                 <Home className="cursor-pointer"/>
                 <Settings className="cursor-pointer"/>
                 <Sun className="cursor-pointer"/>

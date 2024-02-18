@@ -1,25 +1,34 @@
 import Chats from "@/components/Chats";
-import Conversation from "@/components/Conversation";
 import Main from "@/components/Main";
 import UtilityBar from "@/components/UtilityBar";
 import { authOptions } from "@/lib/auth";
-import { Mail, MailQuestion } from "lucide-react";
+import { ConversationType } from "@/types/db";
 import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
 
   const session = await getServerSession(authOptions)
 
- if(!session) {
-  redirect('/sign-in')
- }
+  if(!session) {
+    redirect('/sign-in')
+  }
+
+  const response = await fetch('http://localhost:3000/api/chats', {
+    cache: 'no-store',
+    headers: headers()
+  })
+
+  const data: ConversationType[] = await response.json()
 
   return (
     <div className="flex w-full h-screen relative">
-      <UtilityBar />
+      <div className="hidden">
+        <UtilityBar />
+      </div>
       <Main>
-        <Chats />
+        <Chats data={data}/>
 
       </Main>
     </div>
