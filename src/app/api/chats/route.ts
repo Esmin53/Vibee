@@ -40,6 +40,7 @@ export const GET = async () => {
         .map(item => ({
             name: item.sender.id === session.user.id ? item.reciever.name : item.sender.name,
             image: item.sender.id === session.user.id ? item.reciever.image : item.sender.image,
+            id: item.sender.id === session.user.id ? item.reciever.id : item.sender.id,
             text: item.messages[0].text,
             sentAt: item.messages[0].createdAt,
             senderId: item.messages[0].senderId,

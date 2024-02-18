@@ -29,7 +29,6 @@ export default async function Home() {
       </div>
       <Main>
         <Chats data={data}/>
-
       </Main>
     </div>
   )

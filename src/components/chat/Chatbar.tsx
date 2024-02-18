@@ -1,6 +1,6 @@
 "use client"
 
-import { Send } from "lucide-react"
+import { Loader2, Send } from "lucide-react"
 import { Button } from "../ui/button"
 import { Textarea } from "../ui/textarea"
 import { RefObject, useEffect, useRef, useState } from "react"
@@ -20,13 +20,13 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
     const [input, setInput] = useState<string>("")
     const [message, setMessage] = useState<ExtendedMessage >()
     const textareaRef = useRef<HTMLTextAreaElement>(null) as RefObject<HTMLTextAreaElement>;
-    const session = useSession()
     const pathname = usePathname()
-    const router = useRouter()
+    const [isSending, setIsSending] = useState<boolean >(false)
 
 
     const {mutate: sendMessage} = useMutation({
         mutationFn: async () => {
+            setIsSending(true)
             const response = await fetch('http://localhost:3000/api/messages', {
                 method: "POST",
                 body: JSON.stringify({
@@ -39,11 +39,12 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
 
             setMessage(data)
         },
-        onSuccess: () => {
+        onSettled: () => {
             setInput("")
             if (textareaRef.current) {
                 textareaRef.current.value = "";
               }
+              setIsSending(false)
 
         }
     })
@@ -53,12 +54,12 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
         <form className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl flex items-center gap-1" autoFocus>
             <Textarea className="h-10 resize-none py-3" onChange={(e) => setInput(e.target.value)}
             placeholder="Write a message" rows={1} maxRows={4} ref={textareaRef} />
-            <Button aria-label="Send message" onClick={(e) => {
+            <Button aria-label="Send message" className={`${isSending && 'cursor-wait'}`} onClick={(e) => {
                 e.preventDefault()
                 sendMessage()
             
-                }}>
-                <Send />
+                }} disabled={isSending} >
+                {isSending ? <Loader2 className="animate-spin" /> : <Send />}
             </Button>
         </form>
     </div>

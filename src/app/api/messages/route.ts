@@ -39,7 +39,16 @@ export const GET = async (req: Request) => {
                 ]
             },
             include: {
-                messages: true
+                messages: {
+                    take: 20,
+                    orderBy: {
+                        createdAt: 'desc'
+                    },
+                    include: {
+                        sender: true,
+                        reciever: true
+                    }
+                }
             }
         })
         
@@ -87,9 +96,6 @@ export const POST = async (req: Request) => {
                 UserBId: session.user.id
             }
         })
-
-        revalidateTag(`${recieverId}`)
-        revalidatePath(`http://localhost:3000/messages/${recieverId}`)
     }
 
     const message = await db.message.create({
@@ -104,9 +110,15 @@ export const POST = async (req: Request) => {
             reciever: true
         }        
     })
+
+    let sortedIds = [session.user.id, recieverId].sort()
+    console.log(`${sortedIds[0]}${sortedIds[1]}`)
+
     
+
+
     await pusherServer.trigger(
-        toPusherKey(`conversation:${conversation.id}`), 
+        toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`), 
         'incoming-message', 
         message
     )
@@ -120,7 +132,8 @@ export const POST = async (req: Request) => {
             text: message.text,
             sentAt: message.createdAt,
             senderId: message.senderId,
-            conversationId: message.conversationId
+            conversationId: message.conversationId,
+            id: message.sender.id
         }
     )
 
@@ -133,7 +146,8 @@ export const POST = async (req: Request) => {
             text: message.text,
             sentAt: message.createdAt,
             senderId: message.senderId,
-            conversationId: message.conversationId
+            conversationId: message.conversationId,
+            id: message.reciever.id
         }
     )
 
@@ -141,5 +155,6 @@ export const POST = async (req: Request) => {
         
     } catch (error) {
         console.log(error)
+        return new NextResponse(JSON.stringify(error), {status: 500} )
     }
 }

@@ -85,6 +85,8 @@ model Conversation {
   Status    ConversationType    @default(REQUEST)
 
   id  String @id @default(cuid())
+
+  @@unique([UserAId, UserBId])
 }
 
 model Message {

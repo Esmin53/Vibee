@@ -4,14 +4,20 @@ import { useMutation } from "@tanstack/react-query"
 import { useCallback, useEffect, useRef, useState } from "react"
 import Message from "./Message"
 import { ExtendedMessage } from "@/types/db"
-import { Conversation } from "@prisma/client"
-import { Loader2 } from "lucide-react"
 import { pusherClient } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
+import { Loader2 } from "lucide-react"
 
-const Messages = ({conversationId}: {conversationId: string | null}) => {
-    const [messages, setMessages] = useState<ExtendedMessage[] >([])
-    const [isLoading, setIsloading] = useState<boolean >()
+const Messages = ({conversationId, initialMessages, userId, slug}: {
+    conversationId: string | null
+    initialMessages: ExtendedMessage[]
+    userId: string
+    slug: string
+    }) => {
+
+    const sortedIds = [userId, slug].sort()
+    const [messages, setMessages] = useState<ExtendedMessage[] >(initialMessages)
+    const [isLoading, setIsloading] = useState<boolean >(false)
     const [page, setPage] = useState<number >(1)
     const [hasMore, setHasMore] = useState<boolean >(true)
 
@@ -54,38 +60,25 @@ const Messages = ({conversationId}: {conversationId: string | null}) => {
     })
 
     useEffect(() => {
-        setIsloading(true)
-       
-        return () => getMessages()
-
-    }, [])
-
-    useEffect(() => {
-
-        pusherClient.subscribe(toPusherKey(`conversation:${conversationId}`))
+        pusherClient.subscribe(toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`))
         
             const messagesHandler = (message: ExtendedMessage) => {
                 //@ts-ignore
                 if(!conversationId) {
                     conversationId = message.conversationId
-                    getMessages()
+                    //getMessages()
                 }
-                setMessages((prev) => [message, ...prev!])  
+                setMessages((prev) => [message, ...prev!])
             }
     
         pusherClient.bind(`incoming-message`, messagesHandler)
 
         return () => {
-            pusherClient.unsubscribe(toPusherKey(`conversation:${conversationId}`))
+            pusherClient.unsubscribe(toPusherKey(`conversation:${`${sortedIds[0]}-${sortedIds[1]}`}`))
             pusherClient.unbind('incoming-message', messagesHandler)
         }
     }, [])
 
-    if(!messages) {
-        return ( <div className="flex w-full justify-center items-center h-full flex-col relative">
-            <Loader2 className="w-16 h-16 text-gray-400 animate-spin" />  
-        </div>)
-    }
 
     if(!messages.length) {
         return ( <div className="flex w-full justify-center items-center h-full flex-col relative">
@@ -95,19 +88,26 @@ const Messages = ({conversationId}: {conversationId: string | null}) => {
     }
 
     return (
-        <div className="flex w-full justify-end items-center h-full flex-col relative overflow-x-hidden">
-            <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1
-              max-h-full h-fit overflow-y-scroll flex flex-col-reverse">
-                {messages.map((item, index) => {
-
+        <div className="flex w-full justify-end items-center flex-1 flex-col relative overflow-x-hidden">
+            <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1 bg-gray-200
+              max-h-full overflow-y-auto flex flex-col-reverse h-screen">
+                {messages?.map((item, index) => {
                     if(messages.length === index + 1) {
-                            //@ts-ignore
-                        return <div ref={lastElementRef}> <Message key={index} {...item} name={item.sender.name} image={item.sender.image} />                           
+                        return <div ref={lastElementRef} className="" key={index}> 
+                        <Message {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>                           
                         </div>
                     }
-                    //@ts-ignore
-                    return <Message key={index} {...item} name={item.sender.name} image={item.sender.image} />
+                    if(index === 0) {
+                        return <div className="py-1" key={index}>
+                                    <Message  {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>
+                                </div>
+
+                    }
+                    return <Message key={index} {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>
                 })}
+                { isLoading ? <div className="w-full flex justify-center py-2">
+                    <Loader2 className="animate-spin duration-700 w-7 h-7 text-gray-800 font-bold" />
+                </div> : null }
             </div>
         </div>
 

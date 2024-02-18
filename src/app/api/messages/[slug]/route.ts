@@ -27,7 +27,7 @@ export const GET = async (req: Request) => {
                 sender: true,
                 reciever: true
             },
-            skip: (page - 1) * 20,
+            skip: page * 20,
             take: 20,
             orderBy: {
                 createdAt: 'desc'
@@ -35,9 +35,12 @@ export const GET = async (req: Request) => {
 
         })
 
+
+
             return new NextResponse( JSON.stringify(messages), { status: 200 } )
          
     } catch (error) {
         console.log(error)
+        return new NextResponse( JSON.stringify(error), { status: 500 } )
     }
 }
