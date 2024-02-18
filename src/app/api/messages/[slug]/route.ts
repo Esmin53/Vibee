@@ -35,9 +35,22 @@ export const GET = async (req: Request) => {
 
         })
 
+        const filteredMessages = messages?.reverse()?.map((item, index) => {
+            if(item?.senderId === messages[index + 1]?.senderId) {
+                return {
+                    ...item,
+                    sender: {
+                        ...item.sender,
+                        image: null
+                    }
+                }
+            } else {
+                return item
+            }
+        })
 
 
-            return new NextResponse( JSON.stringify(messages), { status: 200 } )
+        return new NextResponse( JSON.stringify(filteredMessages.reverse()), { status: 200 } )
          
     } catch (error) {
         console.log(error)
