@@ -88,9 +88,9 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
     }
 
     return (
-        <div className="flex w-full justify-end items-center flex-1 flex-col relative overflow-x-hidden">
-            <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1 bg-gray-200
-              max-h-full overflow-y-auto flex flex-col-reverse h-screen">
+        <div className="flex w-full justify-end items-center flex-1 flex-col relative overflow-x-hidden bg-dark">
+            <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1 
+              max-h-full overflow-y-auto flex flex-col-reverse h-screen no-scrollbar">
                 {messages?.map((item, index) => {
                     if(messages.length === index + 1) {
                         return <div ref={lastElementRef} className="" key={index}> 

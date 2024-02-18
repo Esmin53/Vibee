@@ -50,15 +50,16 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
     })
 
 
-    return <div className="sticky bottom-0 left-0 flex items-center justify-center p-2 w-full h-auto shadow-xl bg-gray-200">
+
+    return <div className="sticky bottom-0 left-0 flex items-center justify-center p-2 md:py-4 w-full h-auto  bg-dark">
         <form className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl flex items-center gap-1" autoFocus>
-            <Textarea className="h-10 resize-none py-3" onChange={(e) => setInput(e.target.value)}
+            <Textarea className="h-10 resize-none py-3 bg-dark3 text-slate-50 border-none" onChange={(e) => setInput(e.target.value)}
             placeholder="Write a message" rows={1} maxRows={4} ref={textareaRef} />
-            <Button aria-label="Send message" className={`${isSending && 'cursor-wait'}`} onClick={(e) => {
+            <Button aria-label="Send message" className={`${isSending && 'cursor-wait'} bg-violet1 hover:bg-violet1/90`} onClick={(e) => {
                 e.preventDefault()
                 sendMessage()
             
-                }} disabled={isSending} >
+                }} disabled={isSending}>
                 {isSending ? <Loader2 className="animate-spin" /> : <Send />}
             </Button>
         </form>

@@ -1,11 +1,12 @@
 
 import Main from "@/components/Main"
+import UtilityBar from "@/components/UtilityBar"
 import ChatBar from "@/components/chat/Chatbar"
 import Info from "@/components/chat/Info"
 import Messages from "@/components/chat/Messages"
 import { authOptions } from "@/lib/auth"
 import { ExtendedConversation, ExtendedMessage } from "@/types/db"
-import { Conversation } from "@prisma/client"
+import { ConversationType } from "@/types/db"
 import { Loader2 } from "lucide-react"
 import { getServerSession } from "next-auth"
 import { headers } from "next/headers"
@@ -35,12 +36,24 @@ const SendMessage = async ({ params }: ConversationProps) => {
 
       const data: ExtendedConversation = await response.json()
 
+      const chatsResponse = await fetch('http://localhost:3000/api/chats', {
+        cache: 'no-store',
+        headers: headers()
+      })
+    
+      const chats: ConversationType[] = await chatsResponse.json()
+
     return (
-            <Main>
-                <Info userId={slug} />
-                <Messages conversationId={data?.id} initialMessages={data?.messages || []} userId={session.user.id} slug={slug}/>         
-                <ChatBar conversationId={data?.id || null}/>
-            </Main>
+            <div className="flex w-full bg-dark max-h-screen">
+                <UtilityBar data={chats}/>
+                <Main>
+                  <Info userId={slug} />
+                  <Messages conversationId={data?.id} initialMessages={data?.messages || []} userId={session.user.id} slug={slug}/>         
+                  <ChatBar conversationId={data?.id || null}/>
+
+                </Main>
+            </div>
+
     )
 }
 

@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query"
 import debounce from "lodash.debounce"
 import UserCard from "./UserCard"
 import Link from "next/link"
-import { Ghost } from "lucide-react"
+import { Ghost, Search } from "lucide-react"
 
 export type Data = 
     {
@@ -74,26 +74,30 @@ const SearchBar = () => {
 
 
     return (
-        <div className="w-full h-auto p-2" ref={searchBarRef}>
-            <input type="text" placeholder="Search...?" 
-                className="px-2 w-full h-10 rounded-md bg-gray-100 shadow-sm outline-none text-zinc-900" 
-                onChange={(e) => handleChange(e)}
-            />
-            {data.length === 0 && input.length > 0 && !isLoading ? <div className="w-full flex items-center justify-center font-semibold
+        <div className="flex items-center relative w-full h-10 sm:h-12" ref={searchBarRef}>
+            <div className="flex gap-2 items-center w-full">
+                <input type="text" placeholder="Search...?" 
+                    className="px-2 w-full h-10  rounded-md bg-dark shadow-sm border border-dark3 outline-none text-zinc-100" 
+                    onChange={(e) => handleChange(e)}/>
+                    <div className="w-12 h-10 bg-dark3 flex justify-center items-center rounded-sm sm:rounded-md shadow cursor-pointer">
+                        <Search className="text-white w-6 h-6" />
+                    </div>
+            </div>
+            {data.length === 0 && input.length < 0 && !isLoading ? <div className="w-full flex items-center justify-center font-semibold
              text-gray-600 py-2 flex-col relative">
                 <Ghost className="aboslute text-gray-400 w-12 h-12" />
                 <p>No results</p>
-    </div> : null}
-            <div className="w-full h-auto px-2 bg-gray-100 rounded-md">
+                </div> : null}
+            <div className="w-full h-fit px-2 bg-dark3 rounded-md absolute top-14 left-0 z-50 shadow flex flex-col">
                 {data.length > 0 && data?.map((item, index) => {
                     if(index === 7) {
                         return <Link href={`/users/${input}`} key={index} >
                             <p className="w-full text-center font-semibold text-sm text-blue-500 cursor-pointer 
-                                  py-1 mb-2 hover:text-md">See all results</p>
+                                   hover:text-md">See all results</p>
                             </Link>
                     }
 
-                    return <Link href={`/messages/${item.id}`} key={index} className="w-full py-1 gap-2 cursor-pointer"> 
+                    return <Link href={`/messages/${item.id}`} key={index} className="w-full py-1  cursor-pointer"> 
                         <UserCard {...item} />
                     </Link> 
                 })}

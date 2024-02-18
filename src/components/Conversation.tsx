@@ -1,10 +1,10 @@
 "use client"
 
-import { ExtendedMessage } from "@/types/db"
-import { useSession } from "next-auth/react"
-import UserAvatar from "./UserAvatar"
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+
 
 type ConversationProps = {
     image: string
@@ -16,26 +16,26 @@ type ConversationProps = {
 }
 
 const Conversation = ({image, name, text, sentAt, senderId, id}: ConversationProps) => {
-    const session = useSession()
-
+    const pathname = usePathname()
+    const urlId = pathname.split('/')[2]
+    
 
     return (
-        <Link href={`/messages/${id}`} className="w-full flex lg:gap-4 md:gap-1 gap-2 p-2 cursor-pointer border-y border-gray-300
-         max-w-5xl shadow-sm">
-            <div className="w-10 h-10 md:w-9 md:h-9 lg:w-12 lg:h-12 rounded-md">
-                <UserAvatar image={image} />
+        <Link href={`/messages/${id}`} className={`w-full flex cursor-pointer sm:bg-dark3 p-2 rounded-sm border-b sm:border border-dark3 sm:border-dark
+         max-w-4xl shadow-sm gap-2 sm:gap-6`}>
+
+        <div className="w-10 h-10 sm:w-14 sm:h-14 relative rounded-sm overflow-hidden">
+            <Image fill alt="User avatar" src={image} />
+        </div>
+        <div className="flex flex-col flex-1 gap-1 sm:gap-2">
+            <div className="flex w-full justify-between items-center">
+                <p className="text-white sm:text-md font-thin">{name}</p>
+                <p className="text-xs sm:text-sm text-white font-semibold">{formatDistanceToNow(sentAt)}</p>
             </div>
-            <div className="flex flex-col gap-2 items-start flex-1 ">
-                <div className="flex justify-between items-center flex-1 w-full">
-                    <p className="lg:text-lg md:text-sm font-semibold">{name && name}</p>
-                    
-                    <p className="text-xs">{formatDistanceToNow(sentAt)}</p>
-                </div>
-                <p className="text-sm">
-                    <span className="text-gray-500 font-semibold">{senderId === session.data?.user.id ? "You: " : null}</span>
-                    {text}
-                </p>
+            <div className="w-full flex-1 pr-6">
+                <p className=" text-gray-300 text-sm sm:text-md">{text}</p>
             </div>
+        </div>
         </Link>
     )
 }

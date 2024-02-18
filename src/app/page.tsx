@@ -1,5 +1,7 @@
 import Chats from "@/components/Chats";
+import FooterComponent from "@/components/FooterComponent";
 import Main from "@/components/Main";
+import SearchBar from "@/components/Searchbar";
 import UtilityBar from "@/components/UtilityBar";
 import { authOptions } from "@/lib/auth";
 import { ConversationType } from "@/types/db";
@@ -24,11 +26,15 @@ export default async function Home() {
 
   return (
     <div className="flex w-full h-screen relative">
-      <div className="hidden">
         <UtilityBar />
-      </div>
-      <Main>
+       <Main>
+          <div className="w-full flex md:hidden px-2 pt-2 justify-center">
+              <SearchBar />
+          </div>
         <Chats data={data}/>
+        <div className="w-full md:hidden fixed bottom-0">
+          <FooterComponent />
+        </div>
       </Main>
     </div>
   )

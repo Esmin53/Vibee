@@ -18,10 +18,10 @@ const Message = ({text, image, name, createdAt, senderId, userId}: ExtendedMessa
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md overflow-hidden">
                         {image ? <UserAvatar image={image}/> : null}
                     </div>
-                    <div className={`${senderId === userId ? 'bg-green-600 text-zinc-100 items-end' : 'bg-zinc-100'} shadow
-                    flex flex-col p-1 rounded-md w-fit`}>
+                    <div className={`${senderId === userId ? 'bg-violet1 text-white items-end' : 'bg-dark3'} shadow
+                    flex flex-col p-2 rounded-md w-fit `}>
                         
-                        <p className="text-sm sm:text-md">{text}</p>
+                        <p className="text-sm sm:text-md text-white">{text}</p>
                     </div>
                 </div>
             </div>

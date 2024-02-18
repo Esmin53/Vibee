@@ -35,19 +35,19 @@ const Chats = ({data}: ChatProps) => {
 
 
     if(!chats.length) {
-        return <div className="w-full h-full flex flex-col justify-center items-center">
-            <Ghost className="w-36 h-36 text-gray-400" />
-            <h2 className="lg:text-2xl md:text-md  text-gray-400 font-semibold">Pretty empty in here</h2>
-            <p className="text-gray-400">Try finding some people</p>
+        return <div className="w-full h-full flex flex-col justify-center items-center flex-1">
+            <Ghost className="w-36 h-36 ttext-slate-50" />
+            <h2 className="lg:text-2xl md:text-md  ttext-slate-50 font-semibold">Pretty empty in here</h2>
+            <p className="ttext-slate-50">Try finding some people</p>
         </div>
     }
 
     return (
-        <div className="flex w-full items-center flex-col py-2 ">
+        <div className="flex w-full items-center flex-col flex-1 p-2">
             <div className="w-full max-w-5xl px-2">
-                <p className="lg:text-2xl md:text-md  text-gray-500 font-semibold">My chats</p>
+
             </div>
-            <div className="w-full h-full py-2 flex items-center flex-col">
+            <div className="w-full h-full py-2 flex items-center flex-col gap-1">
                 {chats?.map((item) => {
                     return <Conversation name={item.name} text={item.text} image={item.image} sentAt={item.sentAt}
                     senderId={item.senderId} id={item.id} key={item.id}/>

@@ -13,14 +13,14 @@ interface UserProps {
 const UserCard = ({name, id, image, email}: UserProps) => {
 
     return (
-        <div className="w-full hover:bg-gray-200 p-2 rounded-md">
+        <div className="w-full hover:bg-dark2 p-2 rounded-md">
             <div className="flex gap-2 items-start">
                 <div className="w-10 h-10 rounded-md overflow-hidden">
                     <UserAvatar image={image} />
                 </div>
                 <div>
-                    <p className="text-sm">{name}</p>
-                    <p className="text-xs text-gray-400">Friend</p>
+                    <p className="text-sm text-white font-semibold">{name}</p>
+                    <p className="text-xs text-slate-100">{email}</p>
                 </div>
             </div>
 

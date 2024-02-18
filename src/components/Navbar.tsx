@@ -1,38 +1,31 @@
-"use client"
 
-import { useSidebarContext } from "@/app/context/context"
-import { Bell, MessageCircle, SidebarClose } from "lucide-react"
 import { useSession } from "next-auth/react"
-import UserAvatar from "./UserAvatar"
+import SearchBar from "./Searchbar"
+import { usePathname } from "next/navigation"
+import Image from "next/image"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { pacifico } from "@/app/layout"
 
-const Navbar = () => {
-    
-    const {isSidebarOpen, setIsSidebarOpen} = useSidebarContext()
-    const session = useSession()
+const Navbar = async () => {
+
+    const session = await getServerSession(authOptions)
 
     return (
-            <div className="w-full h-12 md:h-16 flex flex-col justify-center items-center bg-gray-200 
-            px-2 ">
-                <div className="flex justify-between items-center w-full max-w-5xl">
-
-                <div className="flex gap-2 items-center text-gray-500">
-                    <Bell className="w-7 h-7" />
-                    <MessageCircle className="w-7 h-7" />
-                    <SidebarClose onClick={() => setIsSidebarOpen(isSidebarOpen => !isSidebarOpen)}
-                    className={`w-7 h-7 text-gray-500 cursor-pointer md:hidden ${isSidebarOpen && 'hidden' }`} />
-                </div>
-                <div className="flex gap-2 justify-center items-center">
-                    <div className="w-8 h-8 md:w-10 md:h-10">
-                        {session.data?.user.image &&  <UserAvatar image={session.data?.user.image} />}
+        <div className="w-full flex justify-center items-center bg-dark2 h-14 md:h-20 border-b border-dark3">
+            <div className="flex w-full h-full max-w-5xl items-center justify-between md:justify-end p-2">
+            <h2 className={`text-violet1 text-4xl sm:text-5xl ${pacifico.className} md:hidden`}>Vibee</h2>
+                <div className="flex gap-2 items-center">
+                    <div className="sm:w-12 sm:h-12 w-9 h-9 relative rounded-md overflow-hidden">
+                        {session?.user.image && <Image src={session.user.image} fill alt="User profile pic"/>}
                     </div>
-                    <div className="flex flex-col h-full">
-                        <p className=" lg:text-lg text-sm font-semibold">{session.data?.user.name}</p>
-                        <p className="hidden sm:flex text-xs md:text-sm text-gray-500">{session.data?.user.email}</p>
+                    <div className="hidden sm:flex flex-col h-full">
+                        <p className="text-slate-50">{session?.user.name}</p>
+                        <p className="text-sm text-slate-50">{session?.user.email}</p>
                     </div>
                 </div>
-                </div>
-                <hr className="h-0 border-b border-gray-300 mx-3 opacity-80 shadow w-full mt-1.5" />
             </div>
+        </div>
     )
 }
 

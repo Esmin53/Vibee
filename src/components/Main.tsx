@@ -4,8 +4,8 @@ import Navbar from "./Navbar"
 const Main = ({children}: {children: ReactNode}) => {
     
     return (
-        <div className={` bg-gray-200 md:flex-1 w-full 
-        md:flex flex-col shadow`}>
+        <div className={` bg-dark md:flex-1 w-full 
+        md:flex flex-col`}>
             <Navbar />
             {children}
         </div>
