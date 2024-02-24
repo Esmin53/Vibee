@@ -9,3 +9,7 @@ export function toPusherKey(key: string) {
   
   return key.replace(/:/g, '__')
 }
+
+export function formatTime(dateValue: Date, dateToCompare: Date) {
+    
+}

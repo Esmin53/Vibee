@@ -9,10 +9,11 @@ import { useSession } from "next-auth/react"
 import { ConversationType } from "@/types/db"
 
 interface ChatProps {
-    data: ConversationType[]
+    data: ConversationType[],
+    userId: string
 }
 
-const Chats = ({data}: ChatProps) => {
+const Chats = ({data, userId}: ChatProps) => {
 
     const session = useSession()
 
@@ -44,13 +45,10 @@ const Chats = ({data}: ChatProps) => {
 
     return (
         <div className="flex w-full items-center flex-col flex-1 p-2">
-            <div className="w-full max-w-5xl px-2">
-
-            </div>
             <div className="w-full h-full py-2 flex items-center flex-col gap-1">
                 {chats?.map((item) => {
                     return <Conversation name={item.name} text={item.text} image={item.image} sentAt={item.sentAt}
-                    senderId={item.senderId} id={item.id} key={item.id}/>
+                    senderId={item.senderId} id={item.id} key={item.id} userId={userId} recieverId={item.recieverId}/>
                 })}
             </div>
         </div>

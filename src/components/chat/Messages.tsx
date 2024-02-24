@@ -6,7 +6,8 @@ import Message from "./Message"
 import { ExtendedMessage } from "@/types/db"
 import { pusherClient } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
-import { Loader2 } from "lucide-react"
+import { CheckCheck, Loader2 } from "lucide-react"
+import { formatDistanceToNow, isSameDay } from "date-fns"
 
 const Messages = ({conversationId, initialMessages, userId, slug}: {
     conversationId: string | null
@@ -37,6 +38,21 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
         if(node) observer.current.observe(node)
     }, [isLoading] )
 
+    const {mutate: seen} = useMutation({
+        mutationFn: async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/api/messages/${conversationId}`, {
+                    method: 'PUT'
+                })
+
+                const data = await response.json()
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    })
+
 
     const {mutate: getMessages} = useMutation({
         mutationFn: async () => {
@@ -60,6 +76,7 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
     })
 
     useEffect(() => {
+        seen()
         pusherClient.subscribe(toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`))
         
             const messagesHandler = (message: ExtendedMessage) => {
@@ -69,12 +86,13 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
                     //getMessages()
                 }
                 setMessages((prev) => [message, ...prev!])
+                seen()
             }
     
         pusherClient.bind(`incoming-message`, messagesHandler)
 
         return () => {
-            pusherClient.unsubscribe(toPusherKey(`conversation:${`${sortedIds[0]}-${sortedIds[1]}`}`))
+            pusherClient.unsubscribe(toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`))
             pusherClient.unbind('incoming-message', messagesHandler)
         }
     }, [])
@@ -92,25 +110,29 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
             <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1 
               max-h-full overflow-y-auto flex flex-col-reverse h-screen no-scrollbar">
                 {messages?.map((item, index) => {                    
+                    isSameDay(item.createdAt, messages[index + 1]?.createdAt) 
+                    
                     if(messages.length === index + 1) {
                         return <div ref={lastElementRef} className="" key={index}> 
-                        <Message {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>                           
+                        <Message {...item} name={item.sender.name} image={item.sender.image} userId={userId} />                           
                         </div>
                     }
+                    
                     if(index === 0) {
-                        return <div className="py-1" key={index}>
-                                    <Message  {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>
+                        return <div className="py-1 pb-2 relative" key={index} >
+                                    <Message  {...item} name={item.sender.name} image={item.sender.image} userId={userId} isNewest={true}/>
                                 </div>
 
                     }
-                    return <Message key={index} {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>
+                    return <div key={index}>
+                        <Message {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>
+                        </div>
                 })}
                 { isLoading ? <div className="w-full flex justify-center py-2">
                     <Loader2 className="animate-spin duration-700 w-7 h-7 text-gray-800 font-bold" />
-                </div> : null }
+                </div> : null}
             </div>
         </div>
-
     )
 }
 

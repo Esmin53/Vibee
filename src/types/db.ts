@@ -1,4 +1,4 @@
-import type {  User, Message, Conversation,  } from "@prisma/client"
+import type {  User, Message, Conversation  } from "@prisma/client"
 
 /*export type ExtendedRequest = MessageRequest & {
     messages: Message[]
@@ -17,6 +17,7 @@ export type ConversationType = {
     text: string
     sentAt: Date
     senderId: string
+    recieverId: string
     conversationId: string
     id: string
 }

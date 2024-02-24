@@ -29,7 +29,7 @@ const UtilityBar = async ({data}: ChatProps) => {
             <div className="w-full flex px-2 pt-2 justify-center">
               <SearchBar />
             </div>
-              {data && <Chats data={data} />}
+              {data && <Chats data={data} userId={session?.user?.id}/>}
               <div className="w-full h-20 mt-auto border-t shadow-sm border-dark3 flex justify-between items-center px-2">
               <div className="flex gap-2 items-center">
                     <div className="sm:w-12 sm:h-12 w-10 h-10 relative rounded-md overflow-hidden">

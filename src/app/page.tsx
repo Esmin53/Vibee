@@ -5,6 +5,7 @@ import SearchBar from "@/components/Searchbar";
 import UtilityBar from "@/components/UtilityBar";
 import { authOptions } from "@/lib/auth";
 import { ConversationType } from "@/types/db";
+import { pacifico } from "@/app/layout"
 import { getServerSession } from "next-auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -26,12 +27,18 @@ export default async function Home() {
 
   return (
     <div className="flex w-full h-screen relative">
-        <UtilityBar />
+        <UtilityBar data={data}/>
        <Main>
           <div className="w-full flex md:hidden px-2 pt-2 justify-center">
               <SearchBar />
           </div>
-        <Chats data={data}/>
+        <div className="w-full h-full hidden md:flex justify-center items-center">
+            <h1 className="text-7xl lg:text-8xl xl:text-9xl text-slate-500 text-center">Wellcome to <br/> 
+            <span className={`text-violet1 ${pacifico.className}`}>Vibee</span></h1>
+        </div>
+        <div className=" md:hidden">
+          <Chats data={data} userId={session.user.id}/>
+        </div>
         <div className="w-full md:hidden fixed bottom-0">
           <FooterComponent />
         </div>

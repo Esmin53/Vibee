@@ -20,7 +20,7 @@ const Info = async ({userId}: PageProps) => {
             </div>
         )   : null}
             <p className="font-semibold md:text-lg text-slate-50">{user?.name}</p>
-            <Link href="/" replace  prefetch={true} className="ml-auto">
+            <Link href="/" replace={true}  prefetch={false} className="ml-auto">
                 <ArrowLeft className="text-slate-50 cursor-pointer"/>
             </Link>
         </div>

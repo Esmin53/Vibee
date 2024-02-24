@@ -43,14 +43,14 @@ const SendMessage = async ({ params }: ConversationProps) => {
     
       const chats: ConversationType[] = await chatsResponse.json()
 
-      const messages = data.messages.reverse()
+      const messages = data?.messages?.reverse()
 
       const filteredMessages = messages?.map((item, index) => {
         if(item?.senderId === messages[index + 1]?.senderId) {
           return {
             ...item,
             sender: {
-              ...item.sender,
+              ...item?.sender,
               image: null
             }
           }
@@ -59,12 +59,14 @@ const SendMessage = async ({ params }: ConversationProps) => {
         }
       })
 
+      
+
     return (
             <div className="flex w-full bg-dark max-h-screen">
                 <UtilityBar data={chats}/>
                 <Main>
                   <Info userId={slug} />
-                  <Messages conversationId={data?.id} initialMessages={filteredMessages.reverse() || []} userId={session.user.id} slug={slug}/>         
+                  <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
                   <ChatBar conversationId={data?.id || null}/>
 
                 </Main>

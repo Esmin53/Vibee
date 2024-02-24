@@ -132,8 +132,10 @@ export const POST = async (req: Request) => {
             text: message.text,
             sentAt: message.createdAt,
             senderId: message.senderId,
+            recieverId: message.recieverId,
             conversationId: message.conversationId,
-            id: message.sender.id
+            id: message.sender.id,
+            
         }
     )
 
@@ -146,8 +148,9 @@ export const POST = async (req: Request) => {
             text: message.text,
             sentAt: message.createdAt,
             senderId: message.senderId,
+            recieverId: message.recieverId,
             conversationId: message.conversationId,
-            id: message.reciever.id
+            id: message.reciever.id,
         }
     )
 

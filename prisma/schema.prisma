@@ -63,17 +63,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum RequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
-
-enum ConversationType {
-  REQUEST
-  CONVERSATION
-}
-
 model Conversation {
   messages  Message[] 
   UserAId      String
@@ -81,8 +70,6 @@ model Conversation {
 
   UserBId    String
   reciever      User      @relation("User2", fields: [UserBId], references: [id]) 
-
-  Status    ConversationType    @default(REQUEST)
 
   id  String @id @default(cuid())
 
@@ -99,9 +86,7 @@ model Message {
 
   conversationId  String?
   conversation    Conversation?  @relation(fields: [conversationId], references: [id])
-  //@@unique([senderId, recieverId, conversationId])
   
-
   text          String
   createdAt     DateTime @default(now())
 }

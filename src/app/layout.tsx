@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const pacifico = Pacifico({ weight: '400', subsets: ['latin']})
 
+
 export const metadata = {
   title: 'Vibee',
   description: 'Vibee messaging app',
