@@ -5,7 +5,7 @@ const Main = ({children}: {children: ReactNode}) => {
     
     return (
         <div className={` bg-dark md:flex-1 w-full 
-        md:flex flex-col`}>
+        md:flex flex-col items-center`}>
             <Navbar />
             {children}
         </div>

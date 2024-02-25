@@ -33,7 +33,7 @@ const Conversation = ({image, name, text, sentAt, senderId, id, userId, reciever
             </div>
             <div className="w-full flex-1 sm:pr-6 items-start flex gap-1">
                 <p className={` text-slate-200 text-sm sm:text-md`}>
-                    {senderId === userId ? <span className="text-xs text-slate-200 sm:font-semibold">You: </span> : null}
+                    {senderId === userId ? <span className="text-xs text-slate-200 sm:font-semibold break-all">You: </span> : null}
                     {text.slice(0, 57)}{text.length > 57 ? '...' : null}</p>
             </div>
         </div>

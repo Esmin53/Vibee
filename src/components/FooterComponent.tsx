@@ -11,7 +11,7 @@ const FooterComponent = async () => {
     const session = await getServerSession(authOptions)
 
     return (
-        <div className="w-full h-16 md:h-20 mt-auto border-t shadow-sm border-dark3 flex justify-between items-center px-2">
+        <div className="w-full h-16 md:h-20 mt-auto border-t shadow-sm border-dark3 flex justify-between items-center px-2 bg-dark md:bg-dark2">
         <div className="flex gap-2 items-center">
               <div className="w-9 w-sm:10  h-9 sm:h-10 relative rounded-md overflow-hidden">
                   {session?.user.image && <Image src={session.user.image} fill alt="User profile pic"/>}

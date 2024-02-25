@@ -78,3 +78,7 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;
 }
+
+.overflow-wrap-break-word {
+  overflow-wrap: break-word;
+}

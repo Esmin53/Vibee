@@ -36,16 +36,16 @@ export default async function Home() {
             </div>
               <FooterComponent />
             </div>
-        <Main>
+          <Main>
+
           <div className="w-full flex md:hidden px-2 pt-2 justify-center">
               <SearchBar />
           </div>
-        <div className="w-full flex justify-center">
-          <Chats data={data} userId={session.user.id}/>
-        </div>
+          <Chats data={data} userId={session.user.id} className="pb-20 md:pb-2"/>
         <div className="w-full md:hidden fixed bottom-0">
           <FooterComponent />
         </div>
+
       </Main>
     </div>
   )
