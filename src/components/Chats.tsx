@@ -37,9 +37,8 @@ const Chats = ({data, userId}: ChatProps) => {
 
     if(!chats.length) {
         return <div className="w-full h-full flex flex-col justify-center items-center flex-1">
-            <Ghost className="w-36 h-36 ttext-slate-50" />
-            <h2 className="lg:text-2xl md:text-md  ttext-slate-50 font-semibold">Pretty empty in here</h2>
-            <p className="ttext-slate-50">Try finding some people</p>
+            <Ghost className="w-36 h-36 text-slate-500" />
+            <h2 className="lg:text-2xl md:text-md text-slate-500 font-semibold">Try finding some people</h2>
         </div>
     }
 

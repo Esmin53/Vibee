@@ -36,7 +36,7 @@ export default async function Home() {
             <h1 className="text-7xl lg:text-8xl xl:text-9xl text-slate-500 text-center">Wellcome to <br/> 
             <span className={`text-violet1 ${pacifico.className}`}>Vibee</span></h1>
         </div>
-        <div className=" md:hidden">
+        <div className=" md:hidden min-h-full">
           <Chats data={data} userId={session.user.id}/>
         </div>
         <div className="w-full md:hidden fixed bottom-0">

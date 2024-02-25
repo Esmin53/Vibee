@@ -1,6 +1,3 @@
-import Sidebar from "@/components/Sidebar"
-import UtilityBar from "@/components/UtilityBar"
-
 export default function RootLayout({
   children,
 
