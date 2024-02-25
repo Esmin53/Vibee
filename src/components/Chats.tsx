@@ -43,7 +43,7 @@ const Chats = ({data, userId}: ChatProps) => {
     }
 
     return (
-        <div className="flex w-full items-center flex-col flex-1 p-2">
+        <div className="flex w-full items-center flex-col flex-1 p-2 max-w-3xl">
             <div className="w-full h-full py-2 flex items-center flex-col gap-1">
                 {chats?.map((item) => {
                     return <Conversation name={item.name} text={item.text} image={item.image} sentAt={item.sentAt}

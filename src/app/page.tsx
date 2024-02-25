@@ -26,17 +26,21 @@ export default async function Home() {
   const data: ConversationType[] = await response.json()
 
   return (
-    <div className="flex w-full h-screen relative">
-        <UtilityBar data={data}/>
-       <Main>
+    <div className="flex w-full h-screen relative overflow-hidden">
+      <div className={` h-full hidden md:flex flex-col md:w-72 lg:w-96  bg-dark2 border-r border-dark3`}>
+            <div className="w-full h-20 flex items-center px-4 border-b border-dark3 shadow-sm">
+              <h2 className={`text-violet1 text-5xl ${pacifico.className} `}>Vibee</h2>
+            </div>
+            <div className="w-full flex px-2 pt-2 justify-center">
+              <SearchBar />
+            </div>
+              <FooterComponent />
+            </div>
+        <Main>
           <div className="w-full flex md:hidden px-2 pt-2 justify-center">
               <SearchBar />
           </div>
-        <div className="w-full h-full hidden md:flex justify-center items-center">
-            <h1 className="text-7xl lg:text-8xl xl:text-9xl text-slate-500 text-center">Wellcome to <br/> 
-            <span className={`text-violet1 ${pacifico.className}`}>Vibee</span></h1>
-        </div>
-        <div className=" md:hidden min-h-full">
+        <div className="w-full flex justify-center">
           <Chats data={data} userId={session.user.id}/>
         </div>
         <div className="w-full md:hidden fixed bottom-0">

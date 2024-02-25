@@ -12,16 +12,20 @@ import { pacifico } from "@/app/layout"
 import Image from "next/image"
 import FooterComponent from "./FooterComponent"
 
-interface ChatProps {
-  data?: ConversationType[]
-}
 
-const UtilityBar = async ({data}: ChatProps) => {
+const UtilityBar = async () => {
     const session = await getServerSession(authOptions)
 
-  if(!session) {
-    redirect('/sign-in')
-  }
+    const chatsResponse = await fetch('http://localhost:3000/api/chats', {
+      cache: 'no-store',
+      headers: headers()
+    })
+  
+    const chats: ConversationType[] = await chatsResponse.json()
+
+    if(!session) {
+      redirect('/sign-in')
+    }
 
     return <div className={` h-full hidden md:flex flex-col md:w-72 lg:w-96  bg-dark2 border-r border-dark3`}>
             <div className="w-full h-20 flex items-center px-4 border-b border-dark3 shadow-sm">
@@ -30,7 +34,7 @@ const UtilityBar = async ({data}: ChatProps) => {
             <div className="w-full flex px-2 pt-2 justify-center">
               <SearchBar />
             </div>
-              {data && <Chats data={data} userId={session?.user?.id}/>}
+              <Chats data={chats} userId={session?.user?.id}/>
               <FooterComponent />
             </div>
 

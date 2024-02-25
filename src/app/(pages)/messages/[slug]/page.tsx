@@ -36,13 +36,6 @@ const SendMessage = async ({ params }: ConversationProps) => {
 
       const data: ExtendedConversation = await response.json()
 
-      const chatsResponse = await fetch('http://localhost:3000/api/chats', {
-        cache: 'no-store',
-        headers: headers()
-      })
-    
-      const chats: ConversationType[] = await chatsResponse.json()
-
       const messages = data?.messages?.reverse()
 
       const filteredMessages = messages?.map((item, index) => {
@@ -63,7 +56,7 @@ const SendMessage = async ({ params }: ConversationProps) => {
 
     return (
             <div className="flex w-full bg-dark max-h-screen">
-                <UtilityBar data={chats}/>
+                <UtilityBar />
                 <Main>
                   <Info userId={slug} />
                   <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
