@@ -18,7 +18,7 @@ const SignOut = () => {
     }
 
     return <div onClick={(e) => handleLogOut(e)}>
-        <LogOut className="cursor-pointer text-gray-500" />
+        <LogOut className="cursor-pointer text-slate-200 w-7 sm:w-8 h-7 :h-8" />
     </div>
 }
 
