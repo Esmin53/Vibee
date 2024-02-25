@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`bg-zinc-100 ${inter.className} w-screen`}>
+      <body className={`bg-dark text-zinc-200 ${inter.className} w-screen`}>
         <Providers>
               {children}
         </Providers>
