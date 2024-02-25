@@ -58,8 +58,8 @@ const SearchBar = () => {
       useEffect(() => {
         const handleClickOutside = (event: React.MouseEvent) => {
             if ( !searchBarRef.current?.contains(event.target as Node)) {
-              setInput('')
               setData([])
+              setIsInputActive(false)
             }   
           };
 
@@ -80,11 +80,7 @@ const SearchBar = () => {
                 <input type="text" placeholder="Search...?" 
                     className="px-2 w-full h-10  rounded-md bg-dark shadow-sm border border-dark3 outline-none text-zinc-100" 
                     onChange={(e) => handleChange(e)}
-                    onFocus={() => setIsInputActive(true)}
-                    onBlur={(e) => {
-                        setIsInputActive(false)
-                        e.target.value = ''
-                        }}/>
+                    onFocus={() => setIsInputActive(true)}/>
                     <Link href={`/users/${input}`} className={`w-12 h-10 flex justify-center items-center rounded-sm border
                     sm:rounded-md shadow cursor-pointer ${isInputActive ? 'bg-dark border-dark3' : 'bg-dark3 border-dark'}`}>
                         <Search className="text-white w-6 h-6" />
@@ -97,7 +93,7 @@ const SearchBar = () => {
                 <Ghost className="aboslute text-gray-400 w-12 h-12" />
                 <p>No results</p>
                 </div> : null}
-            <div className={`w-full h-fit bg-dark3 absolute -top-1 left-0 z-40 shadow-md flex flex-col border border-dark
+            <div className={`w-full h-fit bg-dark3 absolute -top-1 left-0 z-40 shadow-md flex flex-col border border-dark p-2
                 ${isInputActive ? 'pt-12' : 'hidden'} ${isInputActive && data.length === 0 && 'min-h-[24rem]'}`}>
                 <p className="px-2">Search results:</p>
                 {data.length > 0 && data?.map((item, index) => {
