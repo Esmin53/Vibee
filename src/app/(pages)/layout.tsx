@@ -1,3 +1,6 @@
+import Main from "@/components/Main"
+import UtilityBar from "@/components/UtilityBar"
+
 export default function RootLayout({
   children,
 
@@ -5,8 +8,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex w-full h-screen">
-        {children}
+    <div className="flex w-full max-h-screen">
+      <UtilityBar />
+      {children}
     </div>
   )
 }

@@ -55,16 +55,11 @@ const SendMessage = async ({ params }: ConversationProps) => {
       
 
     return (
-            <div className="flex w-full bg-dark max-h-screen">
-                <UtilityBar />
-                <Main>
-                  <Info userId={slug} />
-                  <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
-                  <ChatBar conversationId={data?.id || null}/>
-
-                </Main>
-            </div>
-
+          <Main>
+            <Info userId={slug} />
+            <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
+            <ChatBar conversationId={data?.id || null}/>
+        </Main>
     )
 }
 

@@ -21,16 +21,12 @@ const Users = () => {
       
 
     return (
-            <div className="flex w-full bg-dark max-h-screen">
-                <UtilityBar />
-                <Main>
-                    <Accounts />
-                    <div className="w-full md:hidden fixed bottom-0">
-                        <FooterComponent />
-                    </div>
-                </Main>
+        <Main>
+            <Accounts />
+            <div className="w-full md:hidden fixed bottom-0">
+                <FooterComponent />
             </div>
-
+        </Main>
     )
 }
 
