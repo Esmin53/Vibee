@@ -8,6 +8,7 @@ import { cn, toPusherKey } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { ConversationType } from "@/types/db"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "./ui/use-toast"
 
 interface ChatProps {
     data: ConversationType[],
