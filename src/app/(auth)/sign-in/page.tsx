@@ -2,7 +2,6 @@
 
 import {signIn, useSession} from "next-auth/react"
 import Link from "next/link"
-import { useEffect} from "react"
 import { useRouter } from "next/navigation"
 
 
@@ -10,17 +9,11 @@ const SignIn = () => {
     const router = useRouter()
     const session = useSession()
 
-    useEffect(() => {
-        if(session.status === 'authenticated') {
-            router.push('/')
-        }
-    }, [session])
-
-
-    if(session.status === 'loading' || session.data) {
-        return <div></div>
+    if(session?.data) {
+        router.push('/')
     }
 
+    if(session.status === 'unauthenticated') {
     return (
             <div className="items-center justify-center h-screen flex w-screen overflow-hidden relative">
                 <div className="flex flex-col sm:gap-32 h-full justify-evenly p-6 sm:h-fit overflow-hidden w-full sm:w-96">
@@ -43,6 +36,9 @@ const SignIn = () => {
                 </div>
             </div>
     )
+    } else {
+        return <div></div>
+    }
 }
 
 export default SignIn
