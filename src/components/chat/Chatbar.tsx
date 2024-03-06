@@ -3,16 +3,11 @@
 import { Loader2, Send } from "lucide-react"
 import { Button } from "../ui/button"
 import { Textarea } from "../ui/textarea"
-import { RefObject, useEffect, useRef, useState } from "react"
+import { RefObject, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { redirect, usePathname } from "next/navigation"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { revalidatePath } from "next/cache"
-import { pusherClient } from "@/lib/pusher"
-import { Message } from "@prisma/client"
+import { usePathname } from "next/navigation"
 import { ExtendedMessage } from "@/types/db"
-import { toPusherKey } from "@/lib/utils"
+
 
 
 
@@ -45,7 +40,6 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
                 textareaRef.current.value = "";
               }
               setIsSending(false)
-
         }
     })
 

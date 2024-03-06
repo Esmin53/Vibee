@@ -6,12 +6,11 @@ import { format} from "date-fns"
 
 type ExtendedMessage = Message & {
     image: string | null,
-    name: string | null,
     userId: string | null
     isNewest?: boolean 
 }
 
-const Message = ({text, image, name, createdAt, senderId, userId}: ExtendedMessage) => {
+const Message = ({text, image, createdAt, senderId, userId}: ExtendedMessage) => {
     
     return (
         <div className={`w-full flex ${senderId === userId ? 'justify-end' : 'justify-start'} relative`}>

@@ -3,9 +3,7 @@ import { db } from "@/lib/db"
 import { pusherServer } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
 import { MessageValidator } from "@/lib/validators/message"
-import { data } from "autoprefixer"
 import { getServerSession } from "next-auth"
-import { revalidatePath, revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export const GET = async (req: Request) => {
@@ -45,8 +43,20 @@ export const GET = async (req: Request) => {
                         createdAt: 'desc'
                     },
                     include: {
-                        sender: true,
-                        reciever: true
+                        sender: {
+                            select: {
+                                id: true,
+                                image: true,
+                                name: true
+                            }
+                        },
+                        reciever: {
+                            select: {
+                                id: true,
+                                image: true,
+                                name: true
+                            }
+                        }
                     }
                 }
             }
@@ -98,6 +108,25 @@ export const POST = async (req: Request) => {
         })
     }
 
+    let sortedIds = [session.user.id, recieverId].sort()
+
+    await pusherServer.trigger(
+        toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`), 
+        'incoming-message', 
+        {
+            id: new Date().toString(),
+            conversation: conversation,
+            text,
+            createdAt: new Date(),
+            recieverId: recieverId,
+            senderId: session.user.id,
+            sender: {
+                id: session.user.id,
+                image: session.user.image,
+            },
+        }
+    )
+
     const message = await db.message.create({
         data: {
             senderId: session.user.id,
@@ -110,18 +139,6 @@ export const POST = async (req: Request) => {
             reciever: true
         }        
     })
-
-    let sortedIds = [session.user.id, recieverId].sort()
-    console.log(`${sortedIds[0]}${sortedIds[1]}`)
-
-    
-
-
-    await pusherServer.trigger(
-        toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`), 
-        'incoming-message', 
-        message
-    )
 
     await pusherServer.trigger(
         toPusherKey(`message:${recieverId}`), 
@@ -157,7 +174,6 @@ export const POST = async (req: Request) => {
     return new NextResponse(JSON.stringify(message), {status: 200} )
         
     } catch (error) {
-        console.log(error)
         return new NextResponse(JSON.stringify(error), {status: 500} )
     }
 }

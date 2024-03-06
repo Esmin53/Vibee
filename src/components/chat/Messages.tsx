@@ -6,8 +6,8 @@ import Message from "./Message"
 import { ExtendedMessage } from "@/types/db"
 import { pusherClient } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
-import { CheckCheck, Loader2 } from "lucide-react"
-import { formatDistanceToNow, isSameDay } from "date-fns"
+import { Loader2 } from "lucide-react"
+import { isSameDay } from "date-fns"
 
 const Messages = ({conversationId, initialMessages, userId, slug}: {
     conversationId: string | null
@@ -38,22 +38,6 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
         if(node) observer.current.observe(node)
     }, [isLoading] )
 
-    const {mutate: seen} = useMutation({
-        mutationFn: async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/api/messages/${conversationId}`, {
-                    method: 'PUT'
-                })
-
-                const data = await response.json()
-                
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    })
-
-
     const {mutate: getMessages} = useMutation({
         mutationFn: async () => {
             setIsloading(true)
@@ -76,17 +60,14 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
     })
 
     useEffect(() => {
-        seen()
         pusherClient.subscribe(toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`))
         
             const messagesHandler = (message: ExtendedMessage) => {
                 //@ts-ignore
                 if(!conversationId) {
                     conversationId = message.conversationId
-                    //getMessages()
                 }
                 setMessages((prev) => [message, ...prev!])
-                seen()
             }
     
         pusherClient.bind(`incoming-message`, messagesHandler)
@@ -114,18 +95,18 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
                     
                     if(messages.length === index + 1) {
                         return <div ref={lastElementRef} className="" key={index}> 
-                        <Message {...item} name={item.sender.name} image={item.sender.image} userId={userId} />                           
+                        <Message {...item} image={item.sender.image} userId={userId} />                           
                         </div>
                     }
                     
                     if(index === 0) {
                         return <div className="py-1 pb-2 relative" key={index} >
-                                    <Message  {...item} name={item.sender.name} image={item.sender.image} userId={userId} isNewest={true}/>
+                                    <Message  {...item} image={item.sender.image} userId={userId} isNewest={true}/>
                                 </div>
 
                     }
                     return <div key={index}>
-                        <Message {...item} name={item.sender.name} image={item.sender.image} userId={userId}/>
+                        <Message {...item} image={item.sender.image} userId={userId}/>
                         </div>
                 })}
                 { isLoading ? <div className="w-full flex justify-center py-2">

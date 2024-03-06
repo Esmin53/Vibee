@@ -11,6 +11,15 @@ export type ExtendedMessage = Message & {
     reciever: User
 }
 
+export type MessageType = {
+    text: string
+    image: string
+    createdAt: Date,
+    senderId: string
+    recieverId: string
+    conversationId: string
+}
+
 export type ConversationType = {
     name: string
     image: string
