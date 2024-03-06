@@ -1,3 +1,4 @@
+import ChangeUsername from "@/components/ChangeUsername";
 import Main from "@/components/Main";
 import { authOptions } from "@/lib/auth"
 import { getServerSession } from "next-auth"
@@ -14,7 +15,7 @@ export const Settings = async () => {
 
     return (
         <Main>
-            Settings
+            <ChangeUsername />
         </Main>
     )
 }
