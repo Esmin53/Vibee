@@ -1,7 +1,6 @@
 "use client"
 
 import UserAvatar from "./UserAvatar"
-import { Button } from "./ui/button"
 
 interface UserProps {
     id: string

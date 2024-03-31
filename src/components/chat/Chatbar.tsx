@@ -8,9 +8,6 @@ import { useMutation } from "@tanstack/react-query"
 import { usePathname } from "next/navigation"
 import { ExtendedMessage } from "@/types/db"
 
-
-
-
 const ChatBar = ({conversationId}: {conversationId: string | null}) => {
     const [input, setInput] = useState<string>("")
     const [message, setMessage] = useState<ExtendedMessage >()
