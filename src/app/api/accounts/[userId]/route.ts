@@ -16,6 +16,6 @@ export const GET = async (req: Request) => {
 
         return new NextResponse(JSON.stringify(user), { status: 200 })
     } catch (error) {
-        console.log(error)
+        return new Response(JSON.stringify("Generic server error"), { status: 500 })
     }
 }
