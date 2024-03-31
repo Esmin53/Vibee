@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation";
 
 
-export const Page = async () => {
+const Page = async () => {
 
     const session = await getServerSession(authOptions);
 
