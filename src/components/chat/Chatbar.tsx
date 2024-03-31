@@ -22,7 +22,7 @@ const ChatBar = ({conversationId}: {conversationId: string | null}) => {
     const {mutate: sendMessage} = useMutation({
         mutationFn: async () => {
             setIsSending(true)
-            const response = await fetch('http://localhost:3000/api/messages', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/messages`, {
                 method: "POST",
                 body: JSON.stringify({
                     text: input,

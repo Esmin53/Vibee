@@ -41,7 +41,7 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
     const {mutate: getMessages} = useMutation({
         mutationFn: async () => {
             setIsloading(true)
-            const response = await fetch(`http://localhost:3000/api/messages/${conversationId}?page=${page}`)
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/messages/${conversationId}?page=${page}`)
 
             const newMessages = await response.json()
             if(!newMessages.length) {

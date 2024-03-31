@@ -1,4 +1,3 @@
-import Main from "@/components/Main"
 import UtilityBar from "@/components/UtilityBar"
 
 export default function RootLayout({

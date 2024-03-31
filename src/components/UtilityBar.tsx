@@ -16,9 +16,9 @@ import FooterComponent from "./FooterComponent"
 const UtilityBar = async () => {
     const session = await getServerSession(authOptions)
 
-    const chatsResponse = await fetch('http://localhost:3000/api/chats', {
+    const chatsResponse = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`, {
       cache: 'no-store',
-      headers: headers()
+      headers: new Headers(headers())
     })
   
     const chats: ConversationType[] = await chatsResponse.json()

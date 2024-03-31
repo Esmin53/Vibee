@@ -17,15 +17,13 @@ interface ChatProps {
 }
 
 const Chats = ({data, userId, className}: ChatProps) => {
-
     const session = useSession()
 
     const [chats, setChats] = useState<ConversationType[]>(data)
-
     const {mutate: getChats} = useMutation({
         mutationFn: async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/chats')
+                const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`)
 
                 const data: ConversationType[] = await response.json()
 

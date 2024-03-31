@@ -18,9 +18,9 @@ export default async function Home() {
     redirect('/sign-in')
   }
 
-  const response = await fetch('http://localhost:3000/api/chats', {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`, {
     cache: 'no-store',
-    headers: headers()
+    headers: new Headers(headers())
   })
 
   const data: ConversationType[] = await response.json()

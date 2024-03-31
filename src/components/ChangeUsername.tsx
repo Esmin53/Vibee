@@ -14,7 +14,7 @@ const ChangeUsername = () => {
     const { mutate: changeUsername } = useMutation({
         mutationFn: async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/settings/username', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/settings/username`, {
                     method: 'POST',
                     body: JSON.stringify({
                         name: newUsername

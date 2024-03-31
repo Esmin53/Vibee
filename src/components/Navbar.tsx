@@ -1,7 +1,3 @@
-
-import { useSession } from "next-auth/react"
-import SearchBar from "./Searchbar"
-import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"

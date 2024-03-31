@@ -27,7 +27,7 @@ const SignUp = () => {
                     </div>
                     <div>
                         <button className="w-full h-12 gap-2 shadow bg-violet1 rounded-md text-lg font-semibold hover:bg-violet1/80" 
-                        onClick={() => signIn('google', { callbackUrl: "http://localhost:3000"})}>
+                        onClick={() => signIn('google', { callbackUrl: process.env.NEXT_PUBLIC_SERVER_URL})}>
                             Continue with Google
                         </button>
                         <p className="text-sm text-end py-2">Alredy an user? 
