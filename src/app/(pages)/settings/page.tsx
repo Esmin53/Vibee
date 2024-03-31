@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation";
 
 
-export const Settings = async () => {
+export const Page = async () => {
 
     const session = await getServerSession(authOptions);
 
@@ -20,4 +20,4 @@ export const Settings = async () => {
     )
 }
 
-export default Settings
+export default Page
