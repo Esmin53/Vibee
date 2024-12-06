@@ -22,11 +22,11 @@ export default async function Home() {
     toast({variant: 'default', title: 'test', description: 'test'})
   }
 
-  const myHeaders = headers()
+
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`, {
     cache: 'no-store',
-    headers: myHeaders
+    headers: new Headers(headers())
   })
 
   const data: ConversationType[] = await response.json()

@@ -1,10 +1,10 @@
 "use client"
 
-import { Message } from "@prisma/client"
+import { Message as MessageType} from "@prisma/client"
 import UserAvatar from "../UserAvatar"
 import { format} from "date-fns"
 
-type ExtendedMessage = Message & {
+type ExtendedMessage = MessageType & {
     image: string | null,
     userId: string | null
     isNewest?: boolean 

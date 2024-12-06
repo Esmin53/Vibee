@@ -20,8 +20,6 @@ const SendMessage = async ({ params }: ConversationProps) => {
     
       const session = await getServerSession(authOptions);
 
-      const myHeaders = headers();
-
       if(!session || !session.user) {
         redirect('/')
       }
@@ -29,7 +27,7 @@ const SendMessage = async ({ params }: ConversationProps) => {
       const { slug } = params;
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/messages?q=${slug}`, {
-        headers: myHeaders,
+        headers: new Headers(headers()),
         cache: 'no-store'
       })
 
