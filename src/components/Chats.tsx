@@ -8,7 +8,6 @@ import { cn, toPusherKey } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { ConversationType } from "@/types/db"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "./ui/use-toast"
 
 interface ChatProps {
     data: ConversationType[],
@@ -25,7 +24,7 @@ const Chats = ({data, userId, className}: ChatProps) => {
     const {mutate: getChats} = useMutation({
         mutationFn: async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/chats')
+                const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`)
 
                 const data: ConversationType[] = await response.json()
 

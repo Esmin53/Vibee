@@ -8,7 +8,7 @@ type PageProps = {
 
 const Info = async ({userId}: PageProps) => {
 
-    const response = await fetch(`http://localhost:3000/api/accounts/${userId}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/accounts/${userId}`)
 
     const user = await response.json()
     return  <div className="w-full flex justify-center sticky top-0 md:mt-2 z-40 ">

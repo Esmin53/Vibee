@@ -28,7 +28,7 @@ const SearchBar = () => {
      const { mutate: search } = useMutation({
         mutationFn: async () => {
             setIsLoading(true)
-            const response =await fetch(`http://localhost:3000/api/accounts?q=${input}`) 
+            const response =await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/accounts?q=${input}`) 
 
             const  data  = await response.json()
 
