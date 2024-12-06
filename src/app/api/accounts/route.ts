@@ -21,5 +21,6 @@ export const GET = async (req: Request) => {
         return new NextResponse(JSON.stringify(results), { status: 200 })
     } catch (error) {
         console.log(error)
+        return new NextResponse(JSON.stringify("Generic Server Error"), { status: 500 })
     }
 }

@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
+export const dynamic = 'force-dynamic';
 
 interface ConversationProps {
   params: {
@@ -19,6 +20,8 @@ const SendMessage = async ({ params }: ConversationProps) => {
     
       const session = await getServerSession(authOptions);
 
+      const myHeaders = headers();
+
       if(!session || !session.user) {
         redirect('/')
       }
@@ -26,7 +29,7 @@ const SendMessage = async ({ params }: ConversationProps) => {
       const { slug } = params;
 
       const response = await fetch(`http://localhost:3000/api/messages?q=${slug}`, {
-        headers: headers(),
+        headers: myHeaders,
         cache: 'no-store'
       })
 

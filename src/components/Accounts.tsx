@@ -39,7 +39,7 @@ const Accounts = () => {
         <div className="w-full flex flex-col justify-center items-center gap-2 p-2">
             <div className="w-full max-w-3xl border-b-2 py-2 border-b-dark3 flex gap-1 sm:gap-2 items-bottom my-2">
                 <h1 className="text-lg sm:text-2xl">Search results for: </h1>
-                <p className="sm:text-lg flex items-end justify-end">"{q}"</p>
+                <p className="sm:text-lg flex items-end justify-end">&quot;{q}&quot;</p>
             </div>   
             {users?.map((item: User) => {
                 return <Link href={`/messages/${item.id}`} key={item?.id} className="max-w-3xl w-full bg-dark2 p-1 sm:p-2 flex gap-2 sm:gap-4 

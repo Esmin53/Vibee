@@ -28,7 +28,7 @@ const SignIn = () => {
                         onClick={() => signIn('google', { callbackUrl: "http://localhost:3000"})}>
                             Continue with Google
                         </button>
-                        <p className="text-sm text-end py-2">Don't have an account? 
+                        <p className="text-sm text-end py-2">Don&apos;t have an account? 
                         <Link href={'/sign-up'} className="text-violet1"> Sign Up</Link></p>
                     </div>
 

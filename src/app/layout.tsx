@@ -1,10 +1,8 @@
 import Providers from '@/components/Providers'
 import './globals.css'
-import { Inter, Pacifico } from 'next/font/google'
+import { Inter} from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const pacifico = Pacifico({ weight: '400', subsets: ['latin']})
 
 
 export const metadata = {

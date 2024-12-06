@@ -17,7 +17,7 @@ const FooterComponent = async () => {
                   {session?.user.image && <Image src={session.user.image} fill alt="User profile pic"/>}
               </div>
           </div>
-          <Link href='/settings' >
+          <Link href='/account-settings' >
                 <Cog className="text-slate-200 w-7 sm:w-8 h-7 :h-8"/>
             </Link>
             <Link href='/' >
