@@ -65,6 +65,7 @@ export const GET = async (req: Request) => {
         return new NextResponse(JSON.stringify(conversation), {status: 200})
     } catch (error) {
         console.log(error)
+        return new NextResponse(JSON.stringify(error), {status: 500} )
     }
 }
 
