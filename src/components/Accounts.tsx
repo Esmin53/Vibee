@@ -18,7 +18,7 @@ const Accounts = () => {
     const {mutate: getUsers} = useMutation({
         mutationFn: async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/accounts?q=${q}`)
+                const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/accounts?q=${q}`)
 
                 const data: User[] = await response.json()
 

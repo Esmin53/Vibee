@@ -8,14 +8,13 @@ import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import Chats from "./Chats"
 import { ConversationType } from "@/types/db"
-import Image from "next/image"
 import FooterComponent from "./FooterComponent"
 
 
 const UtilityBar = async () => {
     const session = await getServerSession(authOptions)
 
-    const chatsResponse = await fetch('http://localhost:3000/api/chats', {
+    const chatsResponse = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`, {
       cache: 'no-store',
       headers: headers()
     })

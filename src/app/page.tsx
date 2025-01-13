@@ -26,7 +26,7 @@ export default async function Home() {
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`, {
     cache: 'no-store',
-    headers: new Headers(headers())
+    headers: headers()
   })
 
   const data: ConversationType[] = await response.json()
