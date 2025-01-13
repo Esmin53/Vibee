@@ -1,7 +1,5 @@
 
 import SearchBar from "./Searchbar"
-import { Home, LogOut, Settings, Sun } from "lucide-react"
-import SignOut from "./SignOut"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
@@ -16,7 +14,7 @@ const UtilityBar = async () => {
 
     const chatsResponse = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chats`, {
       cache: 'no-store',
-      headers: headers()
+      headers: new Headers(headers()),
     })
   
     const chats: ConversationType[] = await chatsResponse.json()

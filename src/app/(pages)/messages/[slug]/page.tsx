@@ -27,7 +27,7 @@ const SendMessage = async ({ params }: ConversationProps) => {
       const { slug } = params;
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/messages?q=${slug}`, {
-        headers: headers(),
+        headers: new Headers(headers()),
         cache: 'no-store'
       })
 
