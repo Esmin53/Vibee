@@ -12,7 +12,7 @@ import { MessageContext } from "./MessageContext"
 
 
 
-const ChatBar = ({conversationId}: {conversationId: string | null}) => {
+const ChatBar = () => {
     const [input, setInput] = useState<string>("")
     const textareaRef = useRef<HTMLTextAreaElement>(null) as RefObject<HTMLTextAreaElement>;
     const pathname = usePathname()

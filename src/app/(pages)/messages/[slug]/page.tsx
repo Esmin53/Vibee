@@ -4,7 +4,7 @@ import Info from "@/components/chat/Info"
 import { MessageContextProvider } from "@/components/chat/MessageContext"
 import Messages from "@/components/chat/Messages"
 import { authOptions } from "@/lib/auth"
-import { ExtendedConversation } from "@/types/db"
+import { db } from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
@@ -32,22 +32,26 @@ const SendMessage = async ({ params }: ConversationProps) => {
         cache: 'no-store'
       })
 
-      const data: ExtendedConversation = await response.json()
+      const data: {
+        id: string;
+        senderId: string;
+        recieverId: string;
+        text: string;
+        createdAt: Date;
+    }[] = await response.json()
 
-      const messages = data?.messages?.reverse()
+      const messages = data || []
 
-      const filteredMessages = messages?.map((item, index) => {
-        if(item?.senderId === messages[index + 1]?.senderId) {
-          return {
-            ...item,
-            sender: {
-              ...item?.sender,
-              image: null
-            }
-          }
-        } else {
-          return item
-        }
+
+      const notOurUser = await db.user.findFirst({
+        where: {
+          id: slug
+        },
+        select: {
+          id: true,   
+          name: true,  
+          image: true  
+      }
       })
 
       
@@ -56,8 +60,12 @@ const SendMessage = async ({ params }: ConversationProps) => {
           <Main>
             <Info userId={slug} />
             <MessageContextProvider>
-              <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
-              <ChatBar conversationId={data?.id || null}/>
+              <Messages initialMessages={messages} ourUser={{
+                id: session.user.id,
+                name: session.user.name!,
+                image: session.user.image!
+              }} notOurUser={notOurUser!}/>         
+              <ChatBar />
             </MessageContextProvider>
         </Main>
     )

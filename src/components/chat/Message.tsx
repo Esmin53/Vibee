@@ -1,13 +1,14 @@
 "use client"
 
-import { Message as MessageType} from "@prisma/client"
 import UserAvatar from "../UserAvatar"
 import { format} from "date-fns"
 
-type ExtendedMessage = MessageType & {
-    image: string | null,
+type ExtendedMessage = {
+    image: string | null
     userId: string | null
-    isNewest?: boolean 
+    text: string
+    createdAt: Date
+    senderId: string
 }
 
 const Message = ({text, image, createdAt, senderId, userId}: ExtendedMessage) => {

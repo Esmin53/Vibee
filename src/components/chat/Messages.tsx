@@ -10,15 +10,37 @@ import { Loader2 } from "lucide-react"
 import { isSameDay } from "date-fns"
 import { MessageContext } from "./MessageContext"
 
-const Messages = ({conversationId, initialMessages, userId, slug}: {
-    conversationId: string | null
-    initialMessages: ExtendedMessage[]
-    userId: string
-    slug: string
-    }) => {
+interface MessagesProps {
+    initialMessages: {
+        id: string;
+        senderId: string;
+        recieverId: string;
+        text: string;
+        createdAt: Date;
+    }[]
+    ourUser: {
+        id: string
+        name: string | null
+        image: string | null
+    }
+    notOurUser: {
+        id: string
+        name: string | null
+        image: string | null
+    }
+}
 
-    const sortedIds = [userId, slug].sort()
-    const [messages, setMessages] = useState<ExtendedMessage[] >(initialMessages)
+const Messages = ({ initialMessages, ourUser, notOurUser}: MessagesProps) => {
+
+    const sortedIds = [ourUser.id, notOurUser.id].sort()
+    let conversationId = `${sortedIds[0]}${sortedIds[1]}`
+    const [messages, setMessages] = useState<{
+        senderId: string,
+        recieverId: string,
+        text: string,
+        id: string,
+        createdAt: Date
+    }[] >(initialMessages)
     const [isLoading, setIsloading] = useState<boolean >(false)
     const [page, setPage] = useState<number >(1)
     const [hasMore, setHasMore] = useState<boolean >(true)
@@ -68,13 +90,13 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
             const messagesHandler = (message: ExtendedMessage) => {
                 //@ts-ignore
                 if(!conversationId) {
-                    conversationId = message.conversationId
+
+                    conversationId = `${sortedIds[0]}${sortedIds[1]}`
                 }
 
-                 if(message.senderId === userId) {
+                 if(message.senderId === ourUser.id) {
                     setIsUpLoading(false)
                  }   
-
 
                 setMessages((prev) => [message, ...prev!])
             }
@@ -100,22 +122,26 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
             <div className="w-full xl:max-w-4xl lg:max-w-2xl md:max-w-xl space-y-1 
               max-h-full overflow-y-auto flex flex-col-reverse h-screen no-scrollbar">
                 {messages?.map((item, index) => {                    
-                    isSameDay(item.createdAt, messages[index + 1]?.createdAt) 
-                    
+                    //let sameDay = isSameDay(item.createdAt, messages[index + 1]?.createdAt) 
+                    let image = item.senderId === ourUser.id ? ourUser.image : notOurUser.image
+                    if(index !== 0 && item.senderId === messages[index - 1].senderId) {
+                        image = null
+                    }
+
                     if(messages.length === index + 1) {
                         return <div ref={lastElementRef} className="" key={index}> 
-                        <Message {...item} image={item.sender.image} userId={userId} />                           
+                        <Message {...item} image={image} userId={ourUser.id} />                           
                         </div>
                     }
                     
                     if(index === 0) {
                         return <div className="py-1 pb-2 relative" key={index} >
-                                    <Message  {...item} image={item.sender.image} userId={userId} isNewest={true}/>
+                                    <Message  {...item} image={image} userId={ourUser.id} />
                                 </div>
 
                     }
                     return <div key={index}>
-                        <Message {...item} image={item.sender.image} userId={userId}/>
+                        <Message {...item} image={image} userId={ourUser.id}/>
                         </div>
                 })}
                 { isLoading ? <div className="w-full flex justify-center py-2">

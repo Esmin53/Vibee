@@ -53,8 +53,24 @@ export const GET = async (req: Request) => {
                 }
             }
         })
+        const messages = await db.message.findMany({
+            where: {
+                conversationId: sortedIdString
+            },
+            select: {
+                senderId: true,
+                recieverId: true,
+                text: true,
+                id: true,
+                createdAt: true
+            },
+            take: 20,
+            orderBy: {
+                createdAt: 'desc'
+            },
+        })
         
-        return new NextResponse(JSON.stringify(conversation), {status: 200})
+        return new NextResponse(JSON.stringify(messages), {status: 200})
     } catch (error) {
         console.log(error)
         return new NextResponse(JSON.stringify(error), {status: 500} )
@@ -63,7 +79,7 @@ export const GET = async (req: Request) => {
 
 export const POST = async (req: Request) => {
     try {
-        const body = await req.json()
+    const body = await req.json()
 
     const {text, recieverId} = MessageValidator.parse(body)
 
@@ -77,16 +93,15 @@ export const POST = async (req: Request) => {
     let sortedIdString = `${sortedIds[0]}${sortedIds[1]}`
 
     // This part checks if a conversation between the two users already exists
-    let conversation = await db.conversation.findFirst({
+    const conversationExists = await db.conversation.count({
         where: {
             id: sortedIdString
         }
-        
     })
     
 
-    if(!conversation) {
-        conversation = await db.conversation.create({
+    if(conversationExists === 0) {
+         await db.conversation.create({
             data: {
                 UserAId: recieverId,
                 UserBId: session.user.id,
@@ -95,36 +110,44 @@ export const POST = async (req: Request) => {
         })
     }
 
+    const message = await db.message.create({
+        data: {
+            senderId: session.user.id,
+            recieverId,
+            text,
+            conversationId: sortedIdString
+        },
+        include: {
+            sender: {
+                select: {
+                    name: true,
+                    image: true,
+                    id: true
+                }
+            },
+            reciever: {
+                select: {
+                    name: true,
+                    image: true,
+                    id: true
+                }
+            }
+        }        
+    })
+
 
     await pusherServer.trigger(
         toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`), 
         'incoming-message', 
         {
             id: new Date().toString(),
-            conversation: conversation,
             text,
             createdAt: new Date(),
             recieverId: recieverId,
             senderId: session.user.id,
-            sender: {
-                id: session.user.id,
-                image: session.user.image,
-            },
         }
     )
 
-    const message = await db.message.create({
-        data: {
-            senderId: session.user.id,
-            recieverId,
-            text,
-            conversationId: conversation.id
-        },
-        include: {
-            sender: true,
-            reciever: true
-        }        
-    })
 
     await pusherServer.trigger(
         toPusherKey(`message:${recieverId}`), 
