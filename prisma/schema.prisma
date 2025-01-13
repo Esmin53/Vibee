@@ -71,7 +71,7 @@ model Conversation {
   UserBId    String
   reciever      User      @relation("User2", fields: [UserBId], references: [id]) 
 
-  id  String @id @default(cuid())
+  id  String @id 
 
   @@unique([UserAId, UserBId])
 }

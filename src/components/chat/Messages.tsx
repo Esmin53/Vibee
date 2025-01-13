@@ -1,13 +1,14 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import Message from "./Message"
 import { ExtendedMessage } from "@/types/db"
 import { pusherClient } from "@/lib/pusher"
 import { toPusherKey } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 import { isSameDay } from "date-fns"
+import { MessageContext } from "./MessageContext"
 
 const Messages = ({conversationId, initialMessages, userId, slug}: {
     conversationId: string | null
@@ -21,6 +22,8 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
     const [isLoading, setIsloading] = useState<boolean >(false)
     const [page, setPage] = useState<number >(1)
     const [hasMore, setHasMore] = useState<boolean >(true)
+
+    const {setIsUpLoading} = useContext(MessageContext)
 
     const observer = useRef<IntersectionObserver | null>()          //@ts-ignore
     const lastElementRef = useCallback(node => {
@@ -67,6 +70,12 @@ const Messages = ({conversationId, initialMessages, userId, slug}: {
                 if(!conversationId) {
                     conversationId = message.conversationId
                 }
+
+                 if(message.senderId === userId) {
+                    setIsUpLoading(false)
+                 }   
+
+
                 setMessages((prev) => [message, ...prev!])
             }
     

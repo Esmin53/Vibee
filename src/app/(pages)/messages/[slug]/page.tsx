@@ -1,6 +1,7 @@
 import Main from "@/components/Main"
 import ChatBar from "@/components/chat/Chatbar"
 import Info from "@/components/chat/Info"
+import { MessageContextProvider } from "@/components/chat/MessageContext"
 import Messages from "@/components/chat/Messages"
 import { authOptions } from "@/lib/auth"
 import { ExtendedConversation } from "@/types/db"
@@ -54,8 +55,10 @@ const SendMessage = async ({ params }: ConversationProps) => {
     return (
           <Main>
             <Info userId={slug} />
-            <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
-            <ChatBar conversationId={data?.id || null}/>
+            <MessageContextProvider>
+              <Messages conversationId={data?.id} initialMessages={filteredMessages?.reverse() || []} userId={session.user.id} slug={slug}/>         
+              <ChatBar conversationId={data?.id || null}/>
+            </MessageContextProvider>
         </Main>
     )
 }

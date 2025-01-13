@@ -21,20 +21,12 @@ export const GET = async (req: Request) => {
             return new NextResponse(JSON.stringify("Unauthorised"), { status: 401 })
         }
 
+            let sortedIds = [q, session.user.id].sort()
+            let sortedIdString = `${sortedIds[0]}${sortedIds[1]}`
+
         const conversation = await db.conversation.findFirst({
             where: {
-                OR: [
-                    {
-                        UserAId: q,
-                        UserBId: session.user.id
-                    
-                    },
-                    {
-                        UserBId: q,
-                        UserAId: session.user.id
-                    
-                    },
-                ]
+                id: sortedIdString
             },
             include: {
                 messages: {
@@ -81,35 +73,28 @@ export const POST = async (req: Request) => {
         return new NextResponse(JSON.stringify("Unauthorised"), { status: 401 })
     }
 
+    let sortedIds = [recieverId, session.user.id].sort()
+    let sortedIdString = `${sortedIds[0]}${sortedIds[1]}`
+
     // This part checks if a conversation between the two users already exists
     let conversation = await db.conversation.findFirst({
         where: {
-            OR: [
-                {
-                    UserAId: recieverId,
-                    UserBId: session.user.id
-                },
-                {
-                    UserBId: recieverId,
-                    UserAId: session.user.id
-                }
-            ]
-
+            id: sortedIdString
         }
         
     })
-
+    
 
     if(!conversation) {
         conversation = await db.conversation.create({
             data: {
                 UserAId: recieverId,
-                UserBId: session.user.id
+                UserBId: session.user.id,
+                id: `${sortedIds[0]}${sortedIds[1]}`
             }
         })
     }
 
-    let sortedIds = [session.user.id, recieverId].sort()
 
     await pusherServer.trigger(
         toPusherKey(`conversation:${`${sortedIds[0]}${sortedIds[1]}`}`), 
